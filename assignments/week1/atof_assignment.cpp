@@ -13,6 +13,7 @@ double my_atof(std::string str)
     if (str[i] == '-')
     {
         sign = -1;
+        i++;
     }
     double integralPart = 0;
     double fractionalPart = 0;
@@ -52,7 +53,7 @@ double my_atof(std::string str)
     }
     fractionalPart = fractionalPart / pow(10, fracCounter);
 
-    finalVal = sign * integralPart + fractionalPart;
+    finalVal = sign * (integralPart + fractionalPart);
     return finalVal;
 }
 
