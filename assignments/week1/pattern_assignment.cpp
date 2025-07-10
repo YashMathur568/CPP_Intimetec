@@ -8,20 +8,18 @@ void makePattern(int Totalrows)
     {
         for (int column = 0; column <= row; column++)
         {
+            if (column == Totalrows / 2)
+            {
+                continue;
+            }
             if (column % 2 == 0)
             {
-                if (column == Totalrows / 2)
-                {
-                    continue;
-                }
+
                 cout << 1;
             }
             else
             {
-                if (column == Totalrows / 2)
-                {
-                    continue;
-                }
+
                 cout << 0;
             }
         }
@@ -79,15 +77,24 @@ void makePattern(int Totalrows)
 
 int main()
 {
-    cout << "Enter the number of rows in pattern" << endl;
-    int n;
-    cin >> n;
-    if (n == 0 || n < 0)
+    int size;
+    while (true)
     {
-        cout << "Please Enter Valid Number Of Rows" << endl;
-        exit(1);
+        cout << "Enter the size of the pattern (positive integer): ";
+        cin >> size;
+
+        if (cin.fail() || size <= 0)
+        {
+            cout << "Invalid input. Please enter a positive number.\n";
+            cin.clear();
+            cin.ignore(10000, '\n');
+        }
+        else
+        {
+            break;
+        }
     }
-    n = 2 * n + 1;
-    makePattern(n);
+    size = 2 * size + 1;
+    makePattern(size);
     return 0;
 }
