@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include <iomanip>
 
 void handleEValue(std::string str)
 {
@@ -15,18 +14,42 @@ void handleEValue(std::string str)
     int mlength = 0;
     bool eAppeared = false;
     bool negativeExponent = false;
+    bool dotAppeared = false;
+    int afterdotLength = 0;
     int sign = 1;
     if (str[i] == '-')
     {
         sign = -1;
         i++;
     }
+    else if (str[i] == '+')
+    {
+        i++;
+    }
+
     while (str[i] != '\0')
     {
+        if (str[i] == 'e' && mlength == 0)
+        {
+            break;
+        }
+        if (str[i] == '.' && dotAppeared == false)
+        {
+            dotAppeared = true;
+            i++;
+        }
+        if (str[i] == '.' && eAppeared == true)
+        {
+            break;
+        }
         if (str[i] >= '0' && str[i] <= '9')
         {
             if (eAppeared == false)
             {
+                if (dotAppeared == true)
+                {
+                    afterdotLength++;
+                }
                 mantissa = mantissa * 10 + (str[i] - '0');
                 mlength++;
                 i++;
@@ -51,7 +74,7 @@ void handleEValue(std::string str)
                     eAppeared = true;
                     if (str[i] == '-')
                     {
-                        negativeExponent == true;
+                        negativeExponent = true;
                         i++;
                     }
                 }
@@ -62,16 +85,20 @@ void handleEValue(std::string str)
                 }
             }
         }
+        else
+        {
+            break;
+        }
     }
     mantissa = mantissa / pow(10, (mlength - 1));
 
     if (negativeExponent == false)
     {
-        std::cout << sign * mantissa << "e+" << exponent + mlength - 1;
+        std::cout << sign * mantissa << "e+" << exponent + mlength - 1 - afterdotLength;
     }
     else
     {
-        std::cout << sign * mantissa << "e+" << exponent - mlength + 1;
+        std::cout << sign * mantissa << "e-" << exponent - mlength + 1 + afterdotLength;
     }
 }
 
@@ -88,6 +115,10 @@ double my_atof(std::string str)
         sign = -1;
         i++;
     }
+    else if (str[i] == '+')
+    {
+        i++;
+    }
     double integralPart = 0;
     double fractionalPart = 0;
     bool decimalAppeared = false;
@@ -97,6 +128,10 @@ double my_atof(std::string str)
 
     while (str[i] != '\0')
     {
+        if (str[i] == '-')
+        {
+            break;
+        }
         if (str[i] == 'e')
         {
             handleEValue(str);
@@ -128,6 +163,10 @@ double my_atof(std::string str)
                 break;
             }
         }
+        else
+        {
+            break;
+        }
     }
     fractionalPart = fractionalPart / pow(10, fracCounter);
 
@@ -142,6 +181,6 @@ int main()
     std::cin >> str;
     double result;
     result = my_atof(str);
-    std::cout << std::fixed << std::setprecision(10) << result << std::endl;
+    std::cout << result << std::endl;
     return 0;
 }
