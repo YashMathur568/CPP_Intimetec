@@ -82,7 +82,7 @@ int main()
     cout << "Enter the number of rows in pattern" << endl;
     int n;
     cin >> n;
-    if (n == 0)
+    if (n == 0 || n < 0)
     {
         cout << "Please Enter Valid Number Of Rows" << endl;
         exit(1);
