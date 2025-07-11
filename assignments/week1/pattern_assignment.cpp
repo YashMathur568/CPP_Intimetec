@@ -4,38 +4,38 @@ using namespace std;
 
 void printUpperHalf(int totalRows)
 {
-    for (int row = 0; row < (totalRows / 2) + 1; row++)
+    for (int row = 1; row <= (totalRows / 2); row++)
     {
-        for (int column = 0; column <= row; column++)
+        for (int column = 1; column <= row; column++)
         {
-            if (column == totalRows / 2)
+            if (column == (totalRows / 2) + 1)
             {
                 continue;
             }
             if (column % 2 == 0)
             {
 
-                cout << "1 ";
+                cout << "0 ";
             }
             else
             {
 
-                cout << "0 ";
+                cout << "1 ";
             }
         }
-        for (int space = 0; space < totalRows - (2 * row) - 2; space++)
+        for (int space = 1; space <= totalRows - (2 * row); space++)
         {
             cout << "  ";
         }
-        for (int column = 0; column <= row; column++)
+        for (int column = 1; column <= row; column++)
         {
             if (column % 2 == 0)
             {
-                cout << "1 ";
+                cout << "0 ";
             }
             else
             {
-                cout << "0 ";
+                cout << "1 ";
             }
         }
         cout << endl;
@@ -44,10 +44,23 @@ void printUpperHalf(int totalRows)
 
 void printLowerHalf(int totalRows)
 {
-    for (int row = 0; row < totalRows / 2; row++)
+    int limiter;
+    if (totalRows % 2 == 0)
     {
-        for (int column = 0; column < (totalRows / 2) - row; column++)
+        limiter = (totalRows / 2);
+    }
+    else
+    {
+        limiter = (totalRows / 2) + 1;
+    }
+    for (int row = 0; row < limiter; row++)
+    {
+        for (int column = 0; column < limiter - row; column++)
         {
+            if (totalRows % 2 != 0 && column == limiter - 1)
+            {
+                continue;
+            }
             if (column % 2 == 0)
             {
                 cout << "1 ";
@@ -58,12 +71,21 @@ void printLowerHalf(int totalRows)
             }
         }
 
-        for (int space = 0; space < 2 * row + 1; space++)
+        int SpaceLimiter;
+        if (totalRows % 2 == 0)
+        {
+            SpaceLimiter = 2 * row;
+        }
+        else
+        {
+            SpaceLimiter = 2 * row - 1;
+        }
+        for (int space = 0; space < SpaceLimiter; space++)
         {
             cout << "  ";
         }
 
-        for (int column = 0; column < (totalRows / 2) - row; column++)
+        for (int column = 0; column < limiter - row; column++)
         {
 
             if (column % 2 == 0)
@@ -106,7 +128,6 @@ int main()
             break;
         }
     }
-    size = 2 * size + 1;
     makePattern(size);
     return 0;
 }
