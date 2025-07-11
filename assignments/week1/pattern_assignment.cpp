@@ -2,77 +2,89 @@
 
 using namespace std;
 
-void makePattern(int Totalrows)
+void printUpperHalf(int totalRows)
 {
-    for (int row = 0; row < (Totalrows / 2) + 1; row++)
+    for (int row = 0; row < (totalRows / 2) + 1; row++)
     {
         for (int column = 0; column <= row; column++)
         {
-            if (column == Totalrows / 2)
+            if (column == totalRows / 2)
             {
                 continue;
             }
             if (column % 2 == 0)
             {
 
-                cout << 1;
+                cout << "1 ";
             }
             else
             {
 
-                cout << 0;
+                cout << "0 ";
             }
         }
-        for (int space = 0; space < Totalrows - (2 * row) - 2; space++)
+        for (int space = 0; space < totalRows - (2 * row) - 2; space++)
         {
-            cout << " ";
+            cout << "  ";
         }
         for (int column = 0; column <= row; column++)
         {
             if (column % 2 == 0)
             {
-                cout << 1;
+                cout << "1 ";
             }
             else
             {
-                cout << 0;
+                cout << "0 ";
             }
         }
         cout << endl;
     }
+}
 
-    for (int row = 0; row < Totalrows / 2; row++)
+void printLowerHalf(int totalRows)
+{
+    for (int row = 0; row < totalRows / 2; row++)
     {
-        for (int column = 0; column < (Totalrows / 2) - row; column++)
+        for (int column = 0; column < (totalRows / 2) - row; column++)
         {
             if (column % 2 == 0)
             {
-                cout << 1;
+                cout << "1 ";
             }
             else
             {
-                cout << 0;
+                cout << "0 ";
             }
         }
 
         for (int space = 0; space < 2 * row + 1; space++)
         {
-            cout << " ";
+            cout << "  ";
         }
 
-        for (int column = 0; column < (Totalrows / 2) - row; column++)
+        for (int column = 0; column < (totalRows / 2) - row; column++)
         {
+
             if (column % 2 == 0)
             {
-                cout << 1;
+                cout << "1 ";
             }
             else
             {
-                cout << 0;
+                cout << "0 ";
             }
         }
         cout << endl;
     }
+}
+
+void makePattern(int totalRows)
+{
+
+    printUpperHalf(totalRows);
+
+    printLowerHalf(totalRows);
 }
 
 int main()
