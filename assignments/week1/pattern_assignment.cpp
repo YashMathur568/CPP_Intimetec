@@ -71,16 +71,16 @@ void printLowerHalf(int totalRows)
             }
         }
 
-        int SpaceLimiter;
+        int spaceLimiter;
         if (totalRows % 2 == 0)
         {
-            SpaceLimiter = 2 * row;
+            spaceLimiter = 2 * row;
         }
         else
         {
-            SpaceLimiter = 2 * row - 1;
+            spaceLimiter = 2 * row - 1;
         }
-        for (int space = 0; space < SpaceLimiter; space++)
+        for (int space = 0; space < spaceLimiter; space++)
         {
             cout << "  ";
         }
