@@ -1,22 +1,43 @@
 #include <iostream>
 #include <string>
-#include <cmath>
 
-void handleEValue(std::string str)
+double pow(double base, int exponent)
+{
+    double result = 1.0;
+    bool isNegative = false;
+    if (exponent < 0)
+    {
+        isNegative = true;
+        exponent = -1 * exponent;
+    }
+    for (int i = 0; i < exponent; ++i)
+    {
+        result *= base;
+    }
+    if (isNegative)
+    {
+        result = 1.0 / result;
+    }
+    return result;
+}
+
+double handleEValue(const std::string &str)
 {
     int i = 0;
     while (str[i] == ' ' && str[i] != '\0')
     {
         i++;
     }
+
     double mantissa = 0;
     double exponent = 0;
-    int mlength = 0;
+    int mLength = 0;
     bool eAppeared = false;
     bool negativeExponent = false;
     bool dotAppeared = false;
     int afterdotLength = 0;
     int sign = 1;
+
     if (str[i] == '-')
     {
         sign = -1;
@@ -29,86 +50,69 @@ void handleEValue(std::string str)
 
     while (str[i] != '\0')
     {
-        if (str[i] == 'e' && mlength == 0)
-        {
-            break;
-        }
-        if (str[i] == '.' && dotAppeared == false)
+        if (str[i] == '.' && !dotAppeared)
         {
             dotAppeared = true;
             i++;
+            continue;
         }
-        if (str[i] == '.' && eAppeared == true)
+
+        if (str[i] == 'e')
         {
+            eAppeared = true;
+            i++;
+            if (str[i] == '-')
+            {
+                negativeExponent = true;
+                i++;
+            }
+            else if (str[i] == '+')
+            {
+                i++;
+            }
             break;
         }
+
         if (str[i] >= '0' && str[i] <= '9')
         {
-            if (eAppeared == false)
+            if (!eAppeared)
             {
-                if (dotAppeared == true)
+                mantissa = mantissa * 10 + (str[i] - '0');
+                if (dotAppeared)
                 {
                     afterdotLength++;
                 }
-                mantissa = mantissa * 10 + (str[i] - '0');
-                mlength++;
-                i++;
+                mLength++;
             }
-            else
-            {
-                exponent = exponent * 10 + (str[i] - '0');
-                i++;
-            }
-        }
-        else if (str[i] == 'e')
-        {
-            if (mantissa == 0)
-            {
-                break;
-            }
-            else
-            {
-                if (eAppeared == false)
-                {
-                    i++;
-                    eAppeared = true;
-                    if (str[i] == '-')
-                    {
-                        negativeExponent = true;
-                        i++;
-                    }
-                }
-                else
-                {
-
-                    break;
-                }
-            }
+            i++;
         }
         else
         {
             break;
         }
     }
-    mantissa = mantissa / pow(10, (mlength - 1));
 
-    if (negativeExponent == false)
+    while (str[i] >= '0' && str[i] <= '9')
     {
-        std::cout << sign * mantissa << "e+" << exponent + mlength - 1 - afterdotLength;
+        exponent = exponent * 10 + (str[i] - '0');
+        i++;
     }
-    else
-    {
-        std::cout << sign * mantissa << "e-" << exponent - mlength + 1 + afterdotLength;
-    }
+
+    mantissa = mantissa / pow(10, afterdotLength);
+
+    int power = (negativeExponent) ? -(int)exponent : (int)exponent;
+
+    return sign * mantissa * pow(10, power);
 }
 
-double my_atof(std::string str)
+double my_atof(const std::string &str)
 {
     int i = 0;
     while (str[i] == ' ' && str[i] != '\0')
     {
         i++;
     }
+
     int sign = 1;
     if (str[i] == '-')
     {
@@ -119,44 +123,36 @@ double my_atof(std::string str)
     {
         i++;
     }
+
     double integralPart = 0;
     double fractionalPart = 0;
     bool decimalAppeared = false;
     int fracCounter = 0;
 
-    double finalVal;
-
     while (str[i] != '\0')
     {
-        if (str[i] == '-')
+        if (str[i] == 'e' || str[i] == 'E')
         {
-            break;
+            return handleEValue(str);
         }
-        if (str[i] == 'e')
-        {
-            handleEValue(str);
-            exit(1);
-        }
+
         if (str[i] >= '0' && str[i] <= '9')
         {
-            if (decimalAppeared == false)
+            if (!decimalAppeared)
             {
                 integralPart = integralPart * 10 + (str[i] - '0');
-                i++;
             }
             else
             {
                 fractionalPart = fractionalPart * 10 + (str[i] - '0');
                 fracCounter++;
-                i++;
             }
         }
         else if (str[i] == '.')
         {
-            if (decimalAppeared == false)
+            if (!decimalAppeared)
             {
                 decimalAppeared = true;
-                i++;
             }
             else
             {
@@ -167,20 +163,21 @@ double my_atof(std::string str)
         {
             break;
         }
+        i++;
     }
-    fractionalPart = fractionalPart / pow(10, fracCounter);
 
-    finalVal = sign * (integralPart + fractionalPart);
-    return finalVal;
+    fractionalPart = fractionalPart / pow(10, fracCounter);
+    return sign * (integralPart + fractionalPart);
 }
 
 int main()
 {
-    std::cout << "Enter the string you want to get converted to double" << std::endl;
+    std::cout << "Enter the String";
     std::string str;
     std::cin >> str;
-    double result;
-    result = my_atof(str);
-    std::cout << result << std::endl;
+
+    double result = my_atof(str);
+    std::cout << "Converted value: " << result << std::endl;
+
     return 0;
 }
