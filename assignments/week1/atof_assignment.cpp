@@ -31,7 +31,6 @@ double handleEValue(const std::string &str)
 
     double mantissa = 0;
     double exponent = 0;
-    int mLength = 0;
     bool eAppeared = false;
     bool negativeExponent = false;
     bool dotAppeared = false;
@@ -57,7 +56,7 @@ double handleEValue(const std::string &str)
             continue;
         }
 
-        if (str[i] == 'e')
+        if (str[i] == 'e' || str[i] == 'E')
         {
             eAppeared = true;
             i++;
@@ -82,7 +81,6 @@ double handleEValue(const std::string &str)
                 {
                     afterdotLength++;
                 }
-                mLength++;
             }
             i++;
         }
@@ -172,7 +170,7 @@ double my_atof(const std::string &str)
 
 int main()
 {
-    std::cout << "Enter the String";
+    std::cout << "Enter the String: ";
     std::string str;
     std::cin >> str;
 
