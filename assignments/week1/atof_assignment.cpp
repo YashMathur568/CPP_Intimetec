@@ -8,46 +8,75 @@ double pow(double base, int exponent)
     if (exponent < 0)
     {
         isNegative = true;
-        exponent = -1 * exponent;
+        exponent = -exponent;
     }
     for (int i = 0; i < exponent; ++i)
     {
         result *= base;
     }
-    if (isNegative)
-    {
-        result = 1.0 / result;
-    }
-    return result;
+    return isNegative ? 1.0 / result : result;
 }
 
-double handleEValue(const std::string &str)
+void skipSpaces(std::string &str, int &i)
 {
-    int i = 0;
     while (str[i] == ' ' && str[i] != '\0')
     {
         i++;
     }
+}
 
-    double mantissa = 0;
-    double exponent = 0;
-    bool eAppeared = false;
-    bool negativeExponent = false;
-    bool dotAppeared = false;
-    int afterdotLength = 0;
-    int sign = 1;
-
+int parseSign(std::string &str, int &i)
+{
     if (str[i] == '-')
     {
-        sign = -1;
         i++;
+        return -1;
     }
     else if (str[i] == '+')
     {
         i++;
+        return 1;
+    }
+    return 1;
+}
+
+double parseUnsignedInteger(std::string &str, int &i)
+{
+    double result = 0;
+    while (str[i] >= '0' && str[i] <= '9')
+    {
+        result = result * 10 + (str[i] - '0');
+        i++;
+    }
+    return result;
+}
+
+double parseFraction(std::string &str, int &i, int &fracLen)
+{
+    double frac = 0;
+    fracLen = 0;
+
+    while (str[i] >= '0' && str[i] <= '9')
+    {
+        frac = frac * 10 + (str[i] - '0');
+        fracLen++;
+        i++;
     }
 
-    while (str[i] != '\0')
+    return frac;
+}
+
+double handleEValue(std::string &str)
+{
+    int i = 0;
+    skipSpaces(str, i);
+
+    int sign = parseSign(str, i);
+    double mantissa = 0;
+    int afterdotLength = 0;
+    bool dotAppeared = false;
+
+    while (str[i] != '\0' && str[i] != 'e' && str[i] != 'E')
     {
         if (str[i] == '.' && !dotAppeared)
         {
@@ -56,115 +85,65 @@ double handleEValue(const std::string &str)
             continue;
         }
 
-        if (str[i] == 'e' || str[i] == 'E')
-        {
-            eAppeared = true;
-            i++;
-            if (str[i] == '-')
-            {
-                negativeExponent = true;
-                i++;
-            }
-            else if (str[i] == '+')
-            {
-                i++;
-            }
-            break;
-        }
-
         if (str[i] >= '0' && str[i] <= '9')
         {
-            if (!eAppeared)
-            {
-                mantissa = mantissa * 10 + (str[i] - '0');
-                if (dotAppeared)
-                {
-                    afterdotLength++;
-                }
-            }
-            i++;
+            mantissa = mantissa * 10 + (str[i] - '0');
+            if (dotAppeared)
+                afterdotLength++;
         }
         else
         {
             break;
         }
+        i++;
     }
 
-    while (str[i] >= '0' && str[i] <= '9')
+    bool negativeExponent = false;
+    double exponent = 0;
+
+    if (str[i] == 'e' || str[i] == 'E')
     {
-        exponent = exponent * 10 + (str[i] - '0');
         i++;
+        if (str[i] == '-')
+        {
+            negativeExponent = true;
+            i++;
+        }
+        else if (str[i] == '+')
+        {
+            i++;
+        }
+
+        exponent = parseUnsignedInteger(str, i);
     }
 
     mantissa = mantissa / pow(10, afterdotLength);
-
-    int power = (negativeExponent) ? -(int)exponent : (int)exponent;
-
-    return sign * mantissa * pow(10, power);
+    int finalPower = negativeExponent ? -(int)exponent : (int)exponent;
+    return sign * mantissa * pow(10, finalPower);
 }
 
-double my_atof(const std::string &str)
+double my_atof(std::string &str)
 {
     int i = 0;
-    while (str[i] == ' ' && str[i] != '\0')
-    {
-        i++;
-    }
+    skipSpaces(str, i);
+    int sign = parseSign(str, i);
 
-    int sign = 1;
-    if (str[i] == '-')
-    {
-        sign = -1;
-        i++;
-    }
-    else if (str[i] == '+')
-    {
-        i++;
-    }
-
-    double integralPart = 0;
+    double integralPart = parseUnsignedInteger(str, i);
     double fractionalPart = 0;
-    bool decimalAppeared = false;
-    int fracCounter = 0;
+    int fracLen = 0;
 
-    while (str[i] != '\0')
+    if (str[i] == '.')
     {
-        if (str[i] == 'e' || str[i] == 'E')
-        {
-            return handleEValue(str);
-        }
-
-        if (str[i] >= '0' && str[i] <= '9')
-        {
-            if (!decimalAppeared)
-            {
-                integralPart = integralPart * 10 + (str[i] - '0');
-            }
-            else
-            {
-                fractionalPart = fractionalPart * 10 + (str[i] - '0');
-                fracCounter++;
-            }
-        }
-        else if (str[i] == '.')
-        {
-            if (!decimalAppeared)
-            {
-                decimalAppeared = true;
-            }
-            else
-            {
-                break;
-            }
-        }
-        else
-        {
-            break;
-        }
         i++;
+        fractionalPart = parseFraction(str, i, fracLen);
     }
 
-    fractionalPart = fractionalPart / pow(10, fracCounter);
+    if (str[i] == 'e' || str[i] == 'E')
+    {
+        return handleEValue(str);
+    }
+
+    fractionalPart = fractionalPart / pow(10, fracLen);
     return sign * (integralPart + fractionalPart);
 }
 
