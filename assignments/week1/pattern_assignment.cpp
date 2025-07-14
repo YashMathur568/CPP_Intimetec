@@ -1,112 +1,72 @@
 #include <iostream>
 
-using namespace std;
-
-void printUpperHalf(int totalRows)
+void printRow(int ColNum)
 {
-    for (int row = 1; row <= (totalRows / 2); row++)
+    std::cout << (ColNum % 2 == 0 ? "1 " : "0 ");
+}
+
+void printLeftHalf(int row, int Totalrows)
+{
+    for (int column = 0; column <= row; column++)
     {
-        for (int column = 1; column <= row; column++)
+        if (column != Totalrows / 2)
         {
-            if (column == (totalRows / 2) + 1)
-            {
-                continue;
-            }
-            if (column % 2 == 0)
-            {
-
-                cout << "0 ";
-            }
-            else
-            {
-
-                cout << "1 ";
-            }
+            printRow(column);
         }
-        for (int space = 1; space <= totalRows - (2 * row); space++)
-        {
-            cout << "  ";
-        }
-        for (int column = 1; column <= row; column++)
-        {
-            if (column % 2 == 0)
-            {
-                cout << "0 ";
-            }
-            else
-            {
-                cout << "1 ";
-            }
-        }
-        cout << endl;
     }
 }
 
-void printLowerHalf(int totalRows)
+void printRightHalf(int row)
 {
-    int limiter;
-    if (totalRows % 2 == 0)
+    for (int column = 0; column <= row; column++)
     {
-        limiter = (totalRows / 2);
-    }
-    else
-    {
-        limiter = (totalRows / 2) + 1;
-    }
-    for (int row = 0; row < limiter; row++)
-    {
-        for (int column = 0; column < limiter - row; column++)
-        {
-            if (totalRows % 2 != 0 && column == limiter - 1)
-            {
-                continue;
-            }
-            if (column % 2 == 0)
-            {
-                cout << "1 ";
-            }
-            else
-            {
-                cout << "0 ";
-            }
-        }
-
-        int spaceLimiter;
-        if (totalRows % 2 == 0)
-        {
-            spaceLimiter = 2 * row;
-        }
-        else
-        {
-            spaceLimiter = 2 * row - 1;
-        }
-        for (int space = 0; space < spaceLimiter; space++)
-        {
-            cout << "  ";
-        }
-
-        for (int column = 0; column < limiter - row; column++)
-        {
-
-            if (column % 2 == 0)
-            {
-                cout << "1 ";
-            }
-            else
-            {
-                cout << "0 ";
-            }
-        }
-        cout << endl;
+        printRow(column);
     }
 }
 
-void makePattern(int totalRows)
+void printSpaces(int count)
 {
+    for (int space = 0; space < count; space++)
+    {
+        std::cout << "  ";
+    }
+}
 
-    printUpperHalf(totalRows);
+void printUpperHalf(int Totalrows)
+{
+    for (int row = 0; row <= Totalrows / 2; row++)
+    {
+        printLeftHalf(row, Totalrows);
+        printSpaces(Totalrows - (2 * row) - 2);
+        printRightHalf(row);
+        std::cout << std::endl;
+    }
+}
 
-    printLowerHalf(totalRows);
+void printLowerHalf(int Totalrows)
+{
+    for (int row = 0; row < Totalrows / 2; row++)
+    {
+        int limit = (Totalrows / 2) - row;
+        for (int column = 0; column < limit; column++)
+        {
+            printRow(column);
+        }
+
+        printSpaces(2 * row + 1);
+
+        for (int column = 0; column < limit; column++)
+        {
+            printRow(column);
+        }
+        std::cout << std::endl;
+    }
+}
+
+void makePattern(int Totalrows)
+{
+    printUpperHalf(Totalrows);
+    printLowerHalf(Totalrows);
 }
 
 int main()
@@ -114,20 +74,22 @@ int main()
     int size;
     while (true)
     {
-        cout << "Enter the size of the pattern (positive integer): ";
-        cin >> size;
+        std::cout << "Enter the size of the pattern (positive integer): ";
+        std::cin >> size;
 
-        if (cin.fail() || size <= 0)
+        if (std::cin.fail() || size <= 0)
         {
-            cout << "Invalid input. Please enter a positive number.\n";
-            cin.clear();
-            cin.ignore(10000, '\n');
+            std::cout << "Invalid input. Please enter a positive number.\n";
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
         }
         else
         {
             break;
         }
     }
+
+    size = 2 * size + 1;
     makePattern(size);
     return 0;
 }
