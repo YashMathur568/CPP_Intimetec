@@ -1,7 +1,6 @@
 .vscode/
+libmathops.so
 calculator
-libmath.so
-
 *.o
 *.out
 *.exe
