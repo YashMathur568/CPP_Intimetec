@@ -1,5 +1,8 @@
 #ifndef SUBTRACTION_H
 #define SUBTRACTION_H
 
-double subtract(double a, double b);
+extern "C"
+{
+    double subtract(double a, double b);
+}
 #endif

@@ -1,5 +1,8 @@
 #ifndef ADDITION_H
 #define ADDITION_H
 
-double add(double a, double b);
+extern "C"
+{
+    double add(double a, double b);
+}
 #endif
