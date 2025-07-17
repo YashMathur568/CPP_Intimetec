@@ -1,1 +1,7 @@
-.vscode
+.vscode/
+implicit_app
+libmath.so
+
+*.o
+*.out
+*.exe
