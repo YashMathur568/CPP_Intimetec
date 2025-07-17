@@ -20,4 +20,5 @@ struct student
     int age;
 };
 
+// We can have macros
 #define PI 3.14
