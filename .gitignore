@@ -3,4 +3,4 @@
 *.out
 *.exe
 *.so
-build/calculator
+build/
