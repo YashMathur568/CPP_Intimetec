@@ -1,6 +1,6 @@
 .vscode/
-libmathops.so
-calculator
+*.so
+build/calculator
 *.o
 *.out
 *.exe
