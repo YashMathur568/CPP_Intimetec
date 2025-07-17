@@ -2,34 +2,46 @@
 #include <dlfcn.h>
 #include <stdexcept>
 
-int main()
+double getValidatedOperand(int operandNumber)
 {
-    double operand1, operand2;
-    int choice;
-
-    std::cout << "Enter value of operand 1: ";
-    std::cin >> operand1;
-    std::cout << "Enter value of operand 2: ";
-    std::cin >> operand2;
-
-    std::cout << "Enter the type of arithmetic operation you want to perform:" << std::endl;
-    std::cout << "1. Addition (+)" << std::endl;
-    std::cout << "2. Subtraction (-)" << std::endl;
-    std::cout << "3. Multiplication (*)" << std::endl;
-    std::cout << "4. Division (/)" << std::endl;
-    std::cout << "Enter your choice (1-4): ";
-    std::cin >> choice;
-
-    void *handle = dlopen("lib/libmathops.so", RTLD_LAZY);
-    if (!handle)
+    double value;
+    while (true)
     {
-        std::cerr << "Cannot open library: " << dlerror() << std::endl;
-        return 1;
+        std::cout << "Enter Value of Operand " << operandNumber << " : ";
+        std::cin >> value;
+
+        if (!std::cin.fail())
+            break;
+
+        std::cout << "Invalid input. Please enter a number.\n";
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
     }
+    return value;
+}
 
-    dlerror();
+int getValidatedChoice()
+{
+    int choice;
+    while (true)
+    {
+        std::cout << "Enter your choice (1-4): ";
+        std::cin >> choice;
 
+        if (!std::cin.fail())
+            break;
+
+        std::cout << "Invalid input. Please enter a number.\n";
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
+    }
+    return choice;
+}
+
+int performOperation(int choice, double operand1, double operand2, void *handle)
+{
     double result;
+
     switch (choice)
     {
     case 1:
@@ -64,7 +76,6 @@ int main()
         catch (const std::runtime_error &e)
         {
             std::cerr << "Error: " << e.what();
-            dlclose(handle);
             return 1;
         }
 
@@ -72,10 +83,36 @@ int main()
     }
     default:
         std::cerr << "Invalid choice!Please enter from 1 to 4." << std::endl;
-        dlclose(handle);
         return 1;
     }
 
-    dlclose(handle);
     return 0;
+}
+
+int main()
+{
+    double operand1 = getValidatedOperand(1);
+    double operand2 = getValidatedOperand(2);
+
+    std::cout << "Enter the type of arithmetic operation you want to perform:" << std::endl;
+    std::cout << "1. Addition (+)" << std::endl;
+    std::cout << "2. Subtraction (-)" << std::endl;
+    std::cout << "3. Multiplication (*)" << std::endl;
+    std::cout << "4. Division (/)" << std::endl;
+    std::cout << "Enter your choice (1-4): ";
+    int choice = getValidatedChoice();
+
+    void *handle = dlopen("../lib/libmathops.so", RTLD_LAZY);
+    if (!handle)
+    {
+        std::cerr << "Cannot open library: " << dlerror() << std::endl;
+        return 1;
+    }
+
+    dlerror();
+
+    int status = performOperation(choice, operand1, operand2, handle);
+
+    dlclose(handle);
+    return status;
 }
