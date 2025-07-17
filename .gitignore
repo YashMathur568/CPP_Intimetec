@@ -1,6 +1,6 @@
 .vscode/
-*.so
-build/calculator
 *.o
 *.out
 *.exe
+*.so
+build/calculator
