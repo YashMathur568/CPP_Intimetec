@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdexcept>
-#include "math_operations.h"
+#include "../include/math_operations.h"
 
 int main()
 {

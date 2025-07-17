@@ -1,5 +1,5 @@
 .vscode/
-implicit_app
+calculator
 libmath.so
 
 *.o
