@@ -47,6 +47,11 @@ int performOperation(int choice, double operand1, double operand2, void *handle)
     case 1:
     {
         double (*add_func)(double, double) = (double (*)(double, double))dlsym(handle, "add");
+        if (add_func == NULL)
+        {
+            std::cout << "Error: Could not find 'add' function in library." << std::endl;
+            return 1;
+        }
         result = add_func(operand1, operand2);
         std::cout << operand1 << " + " << operand2 << " = " << result << std::endl;
         break;
@@ -54,6 +59,11 @@ int performOperation(int choice, double operand1, double operand2, void *handle)
     case 2:
     {
         double (*subtract_func)(double, double) = (double (*)(double, double))dlsym(handle, "subtract");
+        if (subtract_func == NULL)
+        {
+            std::cout << "Error: Could not find 'subtract' function in library." << std::endl;
+            return 1;
+        }
         result = subtract_func(operand1, operand2);
         std::cout << operand1 << " - " << operand2 << " = " << result << std::endl;
         break;
@@ -61,6 +71,11 @@ int performOperation(int choice, double operand1, double operand2, void *handle)
     case 3:
     {
         double (*multiply_func)(double, double) = (double (*)(double, double))dlsym(handle, "multiply");
+        if (multiply_func == NULL)
+        {
+            std::cout << "Error: Could not find 'multiply' function in library." << std::endl;
+            return 1;
+        }
         result = multiply_func(operand1, operand2);
         std::cout << operand1 << " * " << operand2 << " = " << result << std::endl;
         break;
@@ -68,6 +83,11 @@ int performOperation(int choice, double operand1, double operand2, void *handle)
     case 4:
     {
         double (*divide_func)(double, double) = (double (*)(double, double))dlsym(handle, "divide");
+        if (divide_func == NULL)
+        {
+            std::cout << "Error: Could not find 'divide' function in library." << std::endl;
+            return 1;
+        }
         try
         {
             result = divide_func(operand1, operand2);
@@ -75,14 +95,14 @@ int performOperation(int choice, double operand1, double operand2, void *handle)
         }
         catch (const std::runtime_error &e)
         {
-            std::cerr << "Error: " << e.what();
+            std::cout << "Error: " << e.what();
             return 1;
         }
 
         break;
     }
     default:
-        std::cerr << "Invalid choice!Please enter from 1 to 4." << std::endl;
+        std::cout << "Invalid choice!Please enter from 1 to 4." << std::endl;
         return 1;
     }
 
@@ -105,11 +125,9 @@ int main()
     void *handle = dlopen("../lib/libmathops.so", RTLD_LAZY);
     if (!handle)
     {
-        std::cerr << "Cannot open library: " << dlerror() << std::endl;
+        std::cout << "Cannot open library: " << dlerror() << std::endl;
         return 1;
     }
-
-    dlerror();
 
     int status = performOperation(choice, operand1, operand2, handle);
 
