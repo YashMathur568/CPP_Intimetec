@@ -1,4 +1,4 @@
-#include "../include/division.h"
+#include "division.h"
 #include <stdexcept>
 
 double divide(double a, double b)

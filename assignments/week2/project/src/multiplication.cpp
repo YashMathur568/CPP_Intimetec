@@ -1,4 +1,4 @@
-#include "../include/multiplication.h"
+#include "multiplication.h"
 
 double multiply(double a, double b)
 {
