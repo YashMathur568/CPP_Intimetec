@@ -20,5 +20,5 @@ int main()
     int a = NULL;
     cout << a << endl;
 
-    return 0;
+        return 0;
 }
