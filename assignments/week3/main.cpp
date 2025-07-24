@@ -56,6 +56,7 @@ int main()
     while (true)
     {
         std::cout << "\nMatrix Operations Menu:" << std::endl;
+        std::cout << "1. Matrix Addition" << std::endl;
         std::cout << "2. Matrix Multiplication" << std::endl;
         std::cout << "3. Exit" << std::endl;
         std::cout << "Choose an option From 1 To 3: ";
