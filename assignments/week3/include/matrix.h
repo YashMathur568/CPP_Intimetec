@@ -9,14 +9,14 @@ struct MatrixInfo
     double **matrix = nullptr;
 };
 
-void allocateMatrix(MatrixInfo &m);
+void allocateMatrix(MatrixInfo &matInfo);
 void flushInputBuffer();
 int getValidatedInput(const std::string &prompt);
 MatrixInfo getMatrix(const std::string &name);
-void deleteMatrix(MatrixInfo &m);
-void inputMatrix(MatrixInfo &m, const std::string &name);
-void displayMatrix(MatrixInfo &m, const std::string &name);
-MatrixInfo addMatrices(MatrixInfo &A, MatrixInfo &B);
-MatrixInfo multiplyMatrices(MatrixInfo &A, MatrixInfo &B);
+void deleteMatrix(MatrixInfo &matInfo);
+void inputMatrix(MatrixInfo &matInfo, const std::string &name);
+void displayMatrix(MatrixInfo &matInfo, const std::string &name);
+MatrixInfo addMatrices(MatrixInfo &matrix1, MatrixInfo &matrix2);
+MatrixInfo multiplyMatrices(MatrixInfo &matrix1, MatrixInfo &matrix2);
 
 #endif

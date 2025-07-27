@@ -2,12 +2,20 @@
 #include <iostream>
 #include <string>
 
-void allocateMatrix(MatrixInfo &m)
+void allocateMatrix(MatrixInfo &matInfo)
 {
-    m.matrix = new double *[m.totalRows];
-    for (int i = 0; i < m.totalRows; i++)
+    try
     {
-        m.matrix[i] = new double[m.totalCols];
+        matInfo.matrix = new double *[matInfo.totalRows];
+        for (int i = 0; i < matInfo.totalRows; i++)
+        {
+            matInfo.matrix[i] = new double[matInfo.totalCols];
+        }
+    }
+    catch (const std::bad_alloc &e)
+    {
+        std::cout << "Memory allocation failed: " << std::endl;
+        std::exit(1);
     }
 }
 
@@ -41,36 +49,36 @@ int getValidatedInput(const std::string &prompt)
 
 MatrixInfo getMatrix(const std::string &name)
 {
-    MatrixInfo m;
-    std::string rowPrompt = "Enter number of rows for Matrix " + name + ": ";
-    std::string colPrompt = "Enter number of columns for Matrix " + name + ": ";
-    m.totalRows = getValidatedInput(rowPrompt);
-    m.totalCols = getValidatedInput(colPrompt);
-    allocateMatrix(m);
-    return m;
+    MatrixInfo matInfo;
+    std::string rowPrompt = "Enter number of rows for " + name + " : ";
+    std::string colPrompt = "Enter number of columns for " + name + " : ";
+    matInfo.totalRows = getValidatedInput(rowPrompt);
+    matInfo.totalCols = getValidatedInput(colPrompt);
+    allocateMatrix(matInfo);
+    return matInfo;
 }
 
-void deleteMatrix(MatrixInfo &m)
+void deleteMatrix(MatrixInfo &matInfo)
 {
-    for (int i = 0; i < m.totalRows; i++)
+    for (int i = 0; i < matInfo.totalRows; i++)
     {
-        delete[] m.matrix[i];
+        delete[] matInfo.matrix[i];
     }
-    delete[] m.matrix;
-    m.matrix = nullptr;
+    delete[] matInfo.matrix;
+    matInfo.matrix = nullptr;
 }
 
-void inputMatrix(MatrixInfo &m, const std::string &name)
+void inputMatrix(MatrixInfo &matInfo, const std::string &name)
 {
-    std::cout << "Enter values for matrix " << name << ":\n";
-    for (int row = 0; row < m.totalRows; row++)
+    std::cout << "Enter values for " << name << ":\n";
+    for (int row = 0; row < matInfo.totalRows; row++)
     {
-        for (int col = 0; col < m.totalCols; col++)
+        for (int col = 0; col < matInfo.totalCols; col++)
         {
             while (true)
             {
                 std::cout << name << "[" << row << "][" << col << "] = ";
-                std::cin >> m.matrix[row][col];
+                std::cin >> matInfo.matrix[row][col];
 
                 if (std::cin.fail() || std::cin.peek() != '\n')
                 {
@@ -88,42 +96,42 @@ void inputMatrix(MatrixInfo &m, const std::string &name)
     }
 }
 
-void displayMatrix(MatrixInfo &m, const std::string &name)
+void displayMatrix(MatrixInfo &matInfo, const std::string &name)
 {
-    std::cout << "Matrix " << name << ":" << std::endl;
-    for (int row = 0; row < m.totalRows; row++)
+    std::cout << name << ":" << std::endl;
+    for (int row = 0; row < matInfo.totalRows; row++)
     {
-        for (int col = 0; col < m.totalCols; col++)
+        for (int col = 0; col < matInfo.totalCols; col++)
         {
-            std::cout << m.matrix[row][col] << " ";
+            std::cout << matInfo.matrix[row][col] << " ";
         }
         std::cout << std::endl;
     }
 }
 
-MatrixInfo addMatrices(MatrixInfo &A, MatrixInfo &B)
+MatrixInfo addMatrices(MatrixInfo &matrix1, MatrixInfo &matrix2)
 {
     MatrixInfo result;
-    result.totalRows = A.totalRows;
-    result.totalCols = A.totalCols;
+    result.totalRows = matrix1.totalRows;
+    result.totalCols = matrix1.totalCols;
     allocateMatrix(result);
 
     for (int row = 0; row < result.totalRows; row++)
     {
         for (int col = 0; col < result.totalCols; col++)
         {
-            result.matrix[row][col] = A.matrix[row][col] + B.matrix[row][col];
+            result.matrix[row][col] = matrix1.matrix[row][col] + matrix2.matrix[row][col];
         }
     }
 
     return result;
 }
 
-MatrixInfo multiplyMatrices(MatrixInfo &A, MatrixInfo &B)
+MatrixInfo multiplyMatrices(MatrixInfo &matrix1, MatrixInfo &matrix2)
 {
     MatrixInfo result;
-    result.totalRows = A.totalRows;
-    result.totalCols = B.totalCols;
+    result.totalRows = matrix1.totalRows;
+    result.totalCols = matrix2.totalCols;
     allocateMatrix(result);
 
     for (int row = 0; row < result.totalRows; row++)
@@ -131,9 +139,9 @@ MatrixInfo multiplyMatrices(MatrixInfo &A, MatrixInfo &B)
         for (int col = 0; col < result.totalCols; col++)
         {
             result.matrix[row][col] = 0;
-            for (int innerDim = 0; innerDim < A.totalCols; innerDim++)
+            for (int innerDim = 0; innerDim < matrix1.totalCols; innerDim++)
             {
-                result.matrix[row][col] += A.matrix[row][innerDim] * B.matrix[innerDim][col];
+                result.matrix[row][col] += matrix1.matrix[row][innerDim] * matrix2.matrix[innerDim][col];
             }
         }
     }

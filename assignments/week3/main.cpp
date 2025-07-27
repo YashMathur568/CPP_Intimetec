@@ -1,53 +1,60 @@
 #include <iostream>
 #include "matrix.h"
 
+enum MenuOption
+{
+    ADDITION = 1,
+    MULTIPLICATION,
+    EXIT
+};
+
 void performAddition()
 {
-    MatrixInfo A = getMatrix("A");
-    MatrixInfo B = getMatrix("B");
+    MatrixInfo matrix1 = getMatrix("Matrix1");
+    MatrixInfo matrix2 = getMatrix("Matrix2");
 
-    while (A.totalRows != B.totalRows || A.totalCols != B.totalCols)
+    while (matrix1.totalRows != matrix2.totalRows || matrix1.totalCols != matrix2.totalCols)
     {
         std::cout << "For addition both the matrices must have the same dimensions." << std::endl;
-        deleteMatrix(A);
-        deleteMatrix(B);
-        A = getMatrix("A");
-        B = getMatrix("B");
+        deleteMatrix(matrix1);
+        deleteMatrix(matrix2);
+        matrix1 = getMatrix("Matrix1");
+        matrix2 = getMatrix("Matrix2");
     }
 
-    inputMatrix(A, "A");
-    inputMatrix(B, "B");
+    inputMatrix(matrix1, "Matrix1");
+    inputMatrix(matrix2, "Matrix2");
 
-    MatrixInfo result = addMatrices(A, B);
-    displayMatrix(result, "A + B");
+    MatrixInfo result = addMatrices(matrix1, matrix2);
+    displayMatrix(result, "Matrix1 + Matrix2");
 
-    deleteMatrix(A);
-    deleteMatrix(B);
+    deleteMatrix(matrix1);
+    deleteMatrix(matrix2);
     deleteMatrix(result);
 }
 
 void performMultiplication()
 {
-    MatrixInfo A = getMatrix("A");
-    MatrixInfo B = getMatrix("B");
+    MatrixInfo matrix1 = getMatrix("Matrix1");
+    MatrixInfo matrix2 = getMatrix("Matrix2");
 
-    while (A.totalCols != B.totalRows)
+    while (matrix1.totalCols != matrix2.totalRows)
     {
-        std::cout << "For multiplication, columns of Matrix A must equal rows of Matrix B." << std::endl;
-        deleteMatrix(A);
-        deleteMatrix(B);
-        A = getMatrix("A");
-        B = getMatrix("B");
+        std::cout << "For multiplication, columns of Matrix 1 must equal rows of Matrix 2." << std::endl;
+        deleteMatrix(matrix1);
+        deleteMatrix(matrix2);
+        matrix1 = getMatrix("Matrix1");
+        matrix2 = getMatrix("Matrix2");
     }
 
-    inputMatrix(A, "A");
-    inputMatrix(B, "B");
+    inputMatrix(matrix1, "Matrix1");
+    inputMatrix(matrix2, "Matrix2");
 
-    MatrixInfo result = multiplyMatrices(A, B);
-    displayMatrix(result, "A * B");
+    MatrixInfo result = multiplyMatrices(matrix1, matrix2);
+    displayMatrix(result, "Matrix1 * Matrix2");
 
-    deleteMatrix(A);
-    deleteMatrix(B);
+    deleteMatrix(matrix1);
+    deleteMatrix(matrix2);
     deleteMatrix(result);
 }
 
@@ -67,17 +74,17 @@ int main()
 
         switch (choice)
         {
-        case 1:
+        case ADDITION:
             performAddition();
             break;
-        case 2:
+        case MULTIPLICATION:
             performMultiplication();
             break;
-        case 3:
+        case EXIT:
             std::cout << "Exiting...\n";
             return 0;
         default:
-            std::cout << "Invalid choice.Please try again." << std::endl;
+            std::cout << "Invalid choice. Please try again." << std::endl;
         }
     }
 }
