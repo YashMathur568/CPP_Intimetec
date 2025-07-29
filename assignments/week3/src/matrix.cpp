@@ -5,10 +5,20 @@
 
 void allocateMatrix(MatrixInfo &matInfo)
 {
-    matInfo.matrix = new double *[matInfo.totalRows];
+    matInfo.matrix = new (std::nothrow) double *[matInfo.totalRows];
+    if (matInfo.matrix == nullptr)
+    {
+        std::cerr << "Memory allocation failed for row pointers." << std::endl;
+        std::exit(1);
+    }
     for (int row = 0; row < matInfo.totalRows; row++)
     {
-        matInfo.matrix[row] = new double[matInfo.totalCols];
+        matInfo.matrix[row] = new (std::nothrow) double[matInfo.totalCols];
+        if (matInfo.matrix[row] == nullptr)
+        {
+            std::cerr << "Memory allocation failed for row " << row << std::endl;
+            std::exit(1);
+        }
     }
 }
 
