@@ -61,7 +61,7 @@ void populateMatrix(MatrixInfo &matInfo)
 
 void displayMatrix(MatrixInfo &matInfo, const std::string &name)
 {
-    std::cout << name << ":" << std::endl;
+    std::cout << name << ":\n";
     for (int row = 0; row < matInfo.totalRows; row++)
     {
         for (int col = 0; col < matInfo.totalCols; col++)
@@ -84,7 +84,8 @@ MatrixInfo addMatrices(MatrixInfo &matrix1, MatrixInfo &matrix2)
     {
         for (int col = 0; col < result.totalCols; col++)
         {
-            *(*(result.matrix + row) + col) = *(*(matrix1.matrix + row) + col) + *(*(matrix2.matrix + row) + col);
+            *(*(result.matrix + row) + col) =
+                *(*(matrix1.matrix + row) + col) + *(*(matrix2.matrix + row) + col);
         }
     }
     return result;
@@ -103,20 +104,24 @@ MatrixInfo multiplyMatrices(MatrixInfo &matrix1, MatrixInfo &matrix2)
         for (int col = 0; col < result.totalCols; col++)
         {
             *(result.matrix[row] + col) = 0;
-            for (int innerDim = 0; innerDim < matrix1.totalCols; innerDim++)
+            for (int inner = 0; inner < matrix1.totalCols; inner++)
             {
-                *(*(result.matrix + row) + col) += *(*(matrix1.matrix + row) + innerDim) * *(*(matrix2.matrix + innerDim) + col);
+                *(*(result.matrix + row) + col) +=
+                    *(*(matrix1.matrix + row) + inner) *
+                    *(*(matrix2.matrix + inner) + col);
             }
         }
     }
     return result;
 }
 
-MatrixInfo initializeMatrix(const std::string &name)
+MatrixInfo getMatrixFromUser(const std::string &name, int rows, int cols)
 {
     MatrixInfo matInfo;
     matInfo.name = name;
-    getDimensionsFromUser(name, matInfo.totalRows, matInfo.totalCols);
+    matInfo.totalRows = rows;
+    matInfo.totalCols = cols;
     allocateMatrix(matInfo);
+    populateMatrix(matInfo);
     return matInfo;
 }

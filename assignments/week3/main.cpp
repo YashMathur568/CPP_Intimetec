@@ -11,23 +11,24 @@ enum MenuOption
 
 void performAddition()
 {
-    MatrixInfo matrix1 = initializeMatrix("Matrix1");
-    MatrixInfo matrix2 = initializeMatrix("Matrix2");
+    int rows1, cols1, rows2, cols2;
 
-    while (matrix1.totalRows != matrix2.totalRows || matrix1.totalCols != matrix2.totalCols)
+    while (true)
     {
-        std::cout << "For addition both the matrices must have the same dimensions." << std::endl;
-        deleteMatrix(matrix1);
-        deleteMatrix(matrix2);
-        matrix1 = initializeMatrix("Matrix1");
-        matrix2 = initializeMatrix("Matrix2");
+        getDimensionsFromUser("Matrix1", rows1, cols1);
+        getDimensionsFromUser("Matrix2", rows2, cols2);
+
+        if (rows1 == rows2 && cols1 == cols2)
+            break;
+
+        std::cout << "For addition, both matrices must have the same dimensions.\n";
     }
 
-    populateMatrix(matrix1);
-    populateMatrix(matrix2);
+    MatrixInfo matrix1 = getMatrixFromUser("Matrix1", rows1, cols1);
+    MatrixInfo matrix2 = getMatrixFromUser("Matrix2", rows2, cols2);
 
     MatrixInfo result = addMatrices(matrix1, matrix2);
-    displayMatrix(result, "Matrix1 + Matrix2");
+    displayMatrix(result, result.name);
 
     deleteMatrix(matrix1);
     deleteMatrix(matrix2);
@@ -36,23 +37,24 @@ void performAddition()
 
 void performMultiplication()
 {
-    MatrixInfo matrix1 = initializeMatrix("Matrix1");
-    MatrixInfo matrix2 = initializeMatrix("Matrix2");
+    int rows1, cols1, rows2, cols2;
 
-    while (matrix1.totalCols != matrix2.totalRows)
+    while (true)
     {
-        std::cout << "For multiplication, columns of Matrix 1 must equal rows of Matrix 2." << std::endl;
-        deleteMatrix(matrix1);
-        deleteMatrix(matrix2);
-        matrix1 = initializeMatrix("Matrix1");
-        matrix2 = initializeMatrix("Matrix2");
+        getDimensionsFromUser("Matrix1", rows1, cols1);
+        getDimensionsFromUser("Matrix2", rows2, cols2);
+
+        if (cols1 == rows2)
+            break;
+
+        std::cout << "For multiplication, columns of Matrix1 must equal rows of Matrix2.\n";
     }
 
-    populateMatrix(matrix1);
-    populateMatrix(matrix2);
+    MatrixInfo matrix1 = getMatrixFromUser("Matrix1", rows1, cols1);
+    MatrixInfo matrix2 = getMatrixFromUser("Matrix2", rows2, cols2);
 
     MatrixInfo result = multiplyMatrices(matrix1, matrix2);
-    displayMatrix(result, "Matrix1 * Matrix2");
+    displayMatrix(result, result.name);
 
     deleteMatrix(matrix1);
     deleteMatrix(matrix2);
@@ -63,7 +65,7 @@ int main()
 {
     while (true)
     {
-        std::cout << "Matrix Operations Menu:\n";
+        std::cout << "\nMatrix Operations Menu:\n";
         std::cout << "1. Matrix Addition\n";
         std::cout << "2. Matrix Multiplication\n";
         std::cout << "3. Exit\n";

@@ -16,6 +16,6 @@ void populateMatrix(MatrixInfo &matInfo);
 void displayMatrix(MatrixInfo &matInfo, const std::string &name);
 MatrixInfo addMatrices(MatrixInfo &matrix1, MatrixInfo &matrix2);
 MatrixInfo multiplyMatrices(MatrixInfo &matrix1, MatrixInfo &matrix2);
-MatrixInfo initializeMatrix(const std::string &name);
+MatrixInfo getMatrixFromUser(const std::string &name, int rows, int cols);
 
 #endif

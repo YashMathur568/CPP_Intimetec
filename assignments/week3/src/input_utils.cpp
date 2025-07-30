@@ -31,6 +31,6 @@ int getValidatedInput(const std::string &prompt)
 
 void getDimensionsFromUser(const std::string &name, int &rows, int &cols)
 {
-    rows = getValidatedInput("Enter number of rows for " + name + " : ");
-    cols = getValidatedInput("Enter number of columns for " + name + " : ");
+    rows = getValidatedInput("Enter number of rows for " + name + ": ");
+    cols = getValidatedInput("Enter number of columns for " + name + ": ");
 }
