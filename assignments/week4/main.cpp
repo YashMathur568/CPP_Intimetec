@@ -1,6 +1,6 @@
 #include <iostream>
 #include "matrix.h"
-#include "input_utils.h"
+#include "input_output_utils.h"
 
 enum MenuOption
 {
@@ -9,65 +9,65 @@ enum MenuOption
     EXIT
 };
 
-void performAddition()
+void handleMatrixAddition()
 {
     int rows1, cols1, rows2, cols2;
 
     while (true)
     {
-        getDimensionsFromUser("Matrix1", rows1, cols1);
-        getDimensionsFromUser("Matrix2", rows2, cols2);
+        getMatrixDimensions("Matrix A", rows1, cols1);
+        getMatrixDimensions("Matrix B", rows2, cols2);
 
         if (rows1 == rows2 && cols1 == cols2)
             break;
 
-        std::cout << "Dimensions mismatch.Both matrices must be of the same size.\n";
+        std::cout << "Dimensions mismatch. Both matrices must be of the same size.\n";
     }
 
-    Matrix m1(rows1, cols1, "Matrix1");
-    m1.input();
+    Matrix matrixA(rows1, cols1, "Matrix A");
+    inputMatrixValues(matrixA);
 
-    Matrix m2(rows2, cols2, "Matrix2");
-    m2.input();
+    Matrix matrixB(rows2, cols2, "Matrix B");
+    inputMatrixValues(matrixB);
 
-    Matrix result = m1.add(m2);
-    result.display();
+    Matrix result = matrixA + matrixB;
+    displayMatrix(result);
 }
 
-void performMultiplication()
+void handleMatrixMultiplication()
 {
     int rows1, cols1, rows2, cols2;
 
     while (true)
     {
-        getDimensionsFromUser("Matrix1", rows1, cols1);
-        getDimensionsFromUser("Matrix2", rows2, cols2);
+        getMatrixDimensions("Matrix A", rows1, cols1);
+        getMatrixDimensions("Matrix B", rows2, cols2);
 
         if (cols1 == rows2)
             break;
 
-        std::cout << "Invalid.Columns of Matrix1 must equal rows of Matrix2.\n";
+        std::cout << "Invalid. Columns of Matrix A must be equal to rows of Matrix B.\n";
     }
 
-    Matrix m1(rows1, cols1, "Matrix1");
-    m1.input();
+    Matrix matrixA(rows1, cols1, "Matrix A");
+    inputMatrixValues(matrixA);
 
-    Matrix m2(rows2, cols2, "Matrix2");
-    m2.input();
+    Matrix matrixB(rows2, cols2, "Matrix B");
+    inputMatrixValues(matrixB);
 
-    Matrix result = m1.multiply(m2);
-    result.display();
+    Matrix result = matrixA * matrixB;
+    displayMatrix(result);
 }
 
 int main()
 {
     while (true)
     {
-        std::cout << "Matrix Operations Menu:\n";
+        std::cout << "\nMatrix Operations Menu:\n";
         std::cout << "1. Matrix Addition\n";
         std::cout << "2. Matrix Multiplication\n";
         std::cout << "3. Exit\n";
-        std::cout << "Choose an option From 1 To 3: ";
+        std::cout << "Choose an option from 1 to 3: ";
 
         int choice;
         std::cin >> choice;
@@ -83,10 +83,10 @@ int main()
             switch (choice)
             {
             case ADDITION:
-                performAddition();
+                handleMatrixAddition();
                 break;
             case MULTIPLICATION:
-                performMultiplication();
+                handleMatrixMultiplication();
                 break;
             case EXIT:
                 std::cout << "Exiting...\n";

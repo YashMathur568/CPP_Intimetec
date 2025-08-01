@@ -11,18 +11,20 @@ private:
     double **matrix;
     std::string name;
 
-    void allocate();
-    void deallocate();
+    void allocateMatrix();
+    void deallocateMatrix();
 
 public:
-    Matrix(int r, int c, const std::string &n);
+    Matrix(int row, int column, const std::string &name);
     ~Matrix();
 
-    void input();
-    void display();
+    int getMatrixRows();
+    int getMatrixColumns();
+    std::string &getMatrixName();
+    double **getMatrixPointer();
 
-    Matrix add(Matrix &other);
-    Matrix multiply(Matrix &other);
+    Matrix operator+(Matrix &other);
+    Matrix operator*(Matrix &other);
 };
 
 #endif

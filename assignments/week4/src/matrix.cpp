@@ -1,93 +1,59 @@
 #include "matrix.h"
-#include "input_utils.h"
-#include <iostream>
 
-Matrix::Matrix(int row, int col, const std::string &name)
-    : totalRows(row), totalColumns(col), name(name)
+Matrix::Matrix(int row, int column, const std::string &name)
+    : totalRows(row), totalColumns(column), name(name)
 {
-    allocate();
+    allocateMatrix();
 }
 
 Matrix::~Matrix()
 {
-    deallocate();
+    deallocateMatrix();
 }
 
-void Matrix::allocate()
+void Matrix::allocateMatrix()
 {
     matrix = new double *[totalRows];
-    for (int row = 0; row < totalRows; ++row)
+    for (int row = 0; row < totalRows; row++)
         *(matrix + row) = new double[totalColumns];
 }
 
-void Matrix::deallocate()
+void Matrix::deallocateMatrix()
 {
-    for (int row = 0; row < totalRows; ++row)
+    for (int row = 0; row < totalRows; row++)
         delete[] *(matrix + row);
     delete[] matrix;
 }
 
-void Matrix::input()
-{
-    std::cout << "Enter values for " << name << ":\n";
-    for (int row = 0; row < totalRows; ++row)
-    {
-        for (int col = 0; col < totalColumns; ++col)
-        {
-            while (true)
-            {
-                std::cout << name << "[" << row << "][" << col << "] = ";
-                std::cin >> *(*(matrix + row) + col);
-                if (std::cin.fail() || std::cin.peek() != '\n')
-                {
-                    std::cout << "Invalid input. Try again.\n";
-                    std::cin.clear();
-                    flushInputBuffer();
-                }
-                else
-                    break;
-            }
-        }
-    }
-}
+int Matrix::getMatrixRows() { return totalRows; }
+int Matrix::getMatrixColumns() { return totalColumns; }
+std::string &Matrix::getMatrixName() { return name; }
+double **Matrix::getMatrixPointer() { return matrix; }
 
-void Matrix::display()
-{
-    std::cout << name << ":\n";
-    for (int row = 0; row < totalRows; ++row)
-    {
-        for (int col = 0; col < totalColumns; ++col)
-        {
-            std::cout << *(*(matrix + row) + col) << " ";
-        }
-        std::cout << "\n";
-    }
-}
-
-Matrix Matrix::add(Matrix &other)
+Matrix Matrix::operator+(Matrix &other)
 {
     Matrix result(totalRows, totalColumns, name + " + " + other.name);
-    for (int row = 0; row < totalRows; ++row)
+    for (int row = 0; row < totalRows; row++)
     {
-        for (int col = 0; col < totalColumns; ++col)
+        for (int column = 0; column < totalColumns; column++)
         {
-            *(*(result.matrix + row) + col) = *(*(matrix + row) + col) + *(*(other.matrix + row) + col);
+            *(*(result.matrix + row) + column) = *(*(matrix + row) + column) + *(*(other.matrix + row) + column);
         }
     }
     return result;
 }
 
-Matrix Matrix::multiply(Matrix &other)
+Matrix Matrix::operator*(Matrix &other)
 {
     Matrix result(totalRows, other.totalColumns, name + " * " + other.name);
-    for (int row = 0; row < totalRows; ++row)
+    for (int row = 0; row < totalRows; row++)
     {
-        for (int col = 0; col < other.totalColumns; ++col)
+        for (int column = 0; column < other.totalColumns; column++)
         {
-            *(*(result.matrix + row) + col) = 0;
-            for (int inner = 0; inner < totalColumns; ++inner)
+            *(*(result.matrix + row) + column) = 0;
+            for (int inner = 0; inner < totalColumns; inner++)
             {
-                *(*(result.matrix + row) + col) += *(*(matrix + row) + inner) * *(*(other.matrix + inner) + col);
+                *(*(result.matrix + row) + column) += *(*(matrix + row) + inner) * *(*(other.matrix + inner) + column);
             }
         }
     }
