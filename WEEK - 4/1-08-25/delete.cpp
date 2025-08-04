@@ -19,11 +19,17 @@ public:
 };
 
 int main()
-{
-    // A *ptr = new A[3];
-    // delete ptr;
+{ // Making array of objects
+    A *ptr = new A[3];
+    // delete[] ptr;
+    delete ptr;
 
-    int *ptr1 = new int[5]{1, 2, 3, 4, 5};
-    delete[] ptr1;
+    // Single object
+    // A *a = new A();
+    // delete a;
+
+    // primitive type
+    // int *ptr1 = new int[5]{1, 2, 3, 4, 5};
+    // // delete[] ptr1;
     // delete ptr1;
 }
