@@ -8,7 +8,7 @@ void flushInputBuffer();
 int getValidatedInput(const std::string &prompt);
 void getMatrixDimensions(const std::string &matrixName, int &rows, int &columns);
 
-void inputMatrixValues(Matrix &matrix);
-void displayMatrix(Matrix &matrix);
+void inputMatrixValues(Matrix &matrix, const std::string &matrixName);
+void displayMatrix(Matrix &matrix, const std::string &matrixName);
 
 #endif

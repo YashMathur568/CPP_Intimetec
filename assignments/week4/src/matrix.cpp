@@ -1,7 +1,7 @@
 #include "matrix.h"
 
-Matrix::Matrix(int row, int column, const std::string &name)
-    : totalRows(row), totalColumns(column), name(name)
+Matrix::Matrix(int row, int column)
+    : totalRows(row), totalColumns(column)
 {
     allocateMatrix();
 }
@@ -27,25 +27,20 @@ void Matrix::deallocateMatrix()
 
 int Matrix::getMatrixRows() { return totalRows; }
 int Matrix::getMatrixColumns() { return totalColumns; }
-std::string &Matrix::getMatrixName() { return name; }
 double **Matrix::getMatrixPointer() { return matrix; }
 
 Matrix Matrix::operator+(Matrix &other)
 {
-    Matrix result(totalRows, totalColumns, name + " + " + other.name);
+    Matrix result(totalRows, totalColumns);
     for (int row = 0; row < totalRows; row++)
-    {
         for (int column = 0; column < totalColumns; column++)
-        {
             *(*(result.matrix + row) + column) = *(*(matrix + row) + column) + *(*(other.matrix + row) + column);
-        }
-    }
     return result;
 }
 
 Matrix Matrix::operator*(Matrix &other)
 {
-    Matrix result(totalRows, other.totalColumns, name + " * " + other.name);
+    Matrix result(totalRows, other.totalColumns);
     for (int row = 0; row < totalRows; row++)
     {
         for (int column = 0; column < other.totalColumns; column++)

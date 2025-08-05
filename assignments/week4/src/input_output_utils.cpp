@@ -35,16 +35,16 @@ void getMatrixDimensions(const std::string &matrixName, int &rows, int &columns)
     columns = getValidatedInput("Enter number of columns for " + matrixName + ": ");
 }
 
-void inputMatrixValues(Matrix &matrix)
+void inputMatrixValues(Matrix &matrix, const std::string &matrixName)
 {
-    std::cout << "Enter values for " << matrix.getMatrixName() << ":\n";
+    std::cout << "Enter values for " << matrixName << ":\n";
     for (int row = 0; row < matrix.getMatrixRows(); row++)
     {
         for (int column = 0; column < matrix.getMatrixColumns(); column++)
         {
             while (true)
             {
-                std::cout << matrix.getMatrixName() << "[" << row << "][" << column << "] = ";
+                std::cout << matrixName << "[" << row << "][" << column << "] = ";
                 std::cin >> *(*(matrix.getMatrixPointer() + row) + column);
                 if (std::cin.fail() || std::cin.peek() != '\n')
                 {
@@ -59,9 +59,9 @@ void inputMatrixValues(Matrix &matrix)
     }
 }
 
-void displayMatrix(Matrix &matrix)
+void displayMatrix(Matrix &matrix, const std::string &matrixName)
 {
-    std::cout << matrix.getMatrixName() << ":\n";
+    std::cout << matrixName << ":\n";
     for (int row = 0; row < matrix.getMatrixRows(); row++)
     {
         for (int column = 0; column < matrix.getMatrixColumns(); column++)

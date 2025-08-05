@@ -24,14 +24,14 @@ void handleMatrixAddition()
         std::cout << "Dimensions mismatch. Both matrices must be of the same size.\n";
     }
 
-    Matrix matrixA(rows1, cols1, "Matrix A");
-    inputMatrixValues(matrixA);
+    Matrix matrixA(rows1, cols1);
+    inputMatrixValues(matrixA, "Matrix A");
 
-    Matrix matrixB(rows2, cols2, "Matrix B");
-    inputMatrixValues(matrixB);
+    Matrix matrixB(rows2, cols2);
+    inputMatrixValues(matrixB, "Matrix B");
 
     Matrix result = matrixA + matrixB;
-    displayMatrix(result);
+    displayMatrix(result, "Matrix A + Matrix B");
 }
 
 void handleMatrixMultiplication()
@@ -49,14 +49,14 @@ void handleMatrixMultiplication()
         std::cout << "Invalid. Columns of Matrix A must be equal to rows of Matrix B.\n";
     }
 
-    Matrix matrixA(rows1, cols1, "Matrix A");
-    inputMatrixValues(matrixA);
+    Matrix matrixA(rows1, cols1);
+    inputMatrixValues(matrixA, "Matrix A");
 
-    Matrix matrixB(rows2, cols2, "Matrix B");
-    inputMatrixValues(matrixB);
+    Matrix matrixB(rows2, cols2);
+    inputMatrixValues(matrixB, "Matrix B");
 
     Matrix result = matrixA * matrixB;
-    displayMatrix(result);
+    displayMatrix(result, "Matrix A * Matrix B");
 }
 
 int main()
