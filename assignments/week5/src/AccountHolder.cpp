@@ -1,25 +1,38 @@
 #include "AccountHolder.h"
 #include <iostream>
-using namespace std;
 
-void AccountHolder::depositMoney(double amount)
+AccountHolder::AccountHolder() {}
+
+AccountHolder::AccountHolder(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, int accountNumber)
+    : User(userId, name, age, email, contactNumber, password, UserType::AccountHolder),
+      account(accountNumber) {}
+
+void AccountHolder::depositToAccount(double amount)
 {
     account.deposit(amount);
-    cout << "Deposit successful! New Balance: " << account.getBalance() << endl;
 }
 
-void AccountHolder::withdrawMoney(double amount)
+void AccountHolder::withdrawFromAccount(double amount)
 {
     account.withdraw(amount);
-    cout << "Withdrawal successful! New Balance: " << account.getBalance() << endl;
+}
+
+double AccountHolder::checkBalance()
+{
+    return account.getBalance();
 }
 
 void AccountHolder::viewMiniStatement()
 {
-    account.viewMiniStatement();
+    account.printMiniStatement();
 }
 
 void AccountHolder::viewFullStatement()
 {
-    account.viewFullStatement();
+    account.printFullStatement();
+}
+
+Account &AccountHolder::getAccount()
+{
+    return account;
 }

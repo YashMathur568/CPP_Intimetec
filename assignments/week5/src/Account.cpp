@@ -1,7 +1,11 @@
 #include "Account.h"
+#include <ctime>
 #include <iostream>
-#include <string>
-using namespace std;
+#include <algorithm>
+
+Account::Account() : accountNumber(0), balance(0.0), transactionCount(0) {}
+
+Account::Account(int accNumber) : accountNumber(accNumber), balance(0.0), transactionCount(0) {}
 
 void Account::deposit(double amount)
 {
@@ -11,39 +15,64 @@ void Account::deposit(double amount)
 
 void Account::withdraw(double amount)
 {
-    if (balance >= amount)
+    if (amount <= balance)
     {
         balance -= amount;
         addTransaction("Withdraw", amount);
     }
     else
     {
-        cout << "Insufficient funds!" << endl;
+        std::cout << "Insufficient balance!" << std::endl;
     }
 }
 
-void Account::addTransaction(const string &type, double amount)
+double Account::getBalance()
 {
-    if (transactionCount < 10)
+    return balance;
+}
+
+void Account::addTransaction(std::string type, double amount)
+{
+    if (transactionCount < MAX_TRANSACTIONS)
     {
-        transactions[transactionCount++] = new Transaction(type, amount, "2025-08-06");
+        time_t now = time(0);
+        std::string dt = ctime(&now);
+        transactions[transactionCount++] = Transaction(type, amount, dt);
     }
 }
 
-void Account::viewMiniStatement()
+int Account::getTransactionCount()
 {
-    cout << "Mini Statement for Account: " << accountNumber << endl;
+    return transactionCount;
+}
+
+void Account::printMiniStatement()
+{
+    int count = getMiniStatementCount();
+    for (int i = std::max(0, transactionCount - count); i < transactionCount; ++i)
+    {
+        std::cout << transactions[i].getType() << " - "
+                  << transactions[i].getAmount() << " - "
+                  << transactions[i].getDate();
+    }
+}
+
+void Account::printFullStatement()
+{
     for (int i = 0; i < transactionCount; ++i)
     {
-        cout << transactions[i]->type << ": " << transactions[i]->amount << endl;
+        std::cout << transactions[i].getType() << " - "
+                  << transactions[i].getAmount() << " - "
+                  << transactions[i].getDate();
     }
 }
 
-void Account::viewFullStatement()
+int Account::getMiniStatementCount()
 {
-    cout << "Full Statement for Account: " << accountNumber << endl;
-    for (int i = 0; i < transactionCount; ++i)
-    {
-        cout << "Type: " << transactions[i]->type << ", Amount: " << transactions[i]->amount << ", Date: " << transactions[i]->date << endl;
-    }
+    return std::min(transactionCount, 5);
+}
+
+int Account::getAccountNumber()
+{
+    return accountNumber;
 }

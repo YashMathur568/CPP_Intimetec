@@ -1,26 +1,22 @@
 #include "Admin.h"
-#include <iostream>
-using namespace std;
+#include "Bank.h"
 
-void Admin::createAccountForAccountHolder(AccountHolder &accountHolder)
+Admin::Admin() {}
+
+Admin::Admin(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password)
+    : User(userId, name, age, email, contactNumber, password, UserType::Admin) {}
+
+bool Admin::createAccountForAccountHolder(AccountHolder &accHolder, Bank &bank)
 {
-    if (bankRef->createAccount(accountHolder))
-    {
-        cout << "Account created successfully!" << endl;
-    }
-    else
-    {
-        cout << "Account creation failed!" << endl;
-    }
+    return bank.createAccount(accHolder, *this);
 }
 
-Account *Admin::searchAccountByNumber(int accountNumber)
+Account *Admin::searchAccountByNumber(int accNumber, Bank &bank)
 {
-    return bankRef->searchAccountByNumber(accountNumber);
+    return bank.searchAccount(accNumber, *this);
 }
 
-void Admin::closeAccount(int accountNumber)
+void Admin::closeAccount(int accNumber, Bank &bank)
 {
-    bankRef->closeAccount(accountNumber);
-    cout << "Account closed successfully!" << endl;
+    bank.closeAccount(accNumber, *this);
 }

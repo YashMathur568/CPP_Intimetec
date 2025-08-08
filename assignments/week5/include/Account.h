@@ -2,46 +2,32 @@
 #define ACCOUNT_H
 
 #include "Transaction.h"
-#include <iostream>
-using namespace std;
+#include <string>
+
+#define MAX_TRANSACTIONS 1000
 
 class Account
 {
-private:
     int accountNumber;
     double balance;
-    Transaction *transactions[10];
+    Transaction transactions[MAX_TRANSACTIONS];
     int transactionCount;
 
 public:
-    Account() : accountNumber(0), balance(0.0), transactionCount(0) {}
-
-    Account(int accNum) : accountNumber(accNum), balance(0.0), transactionCount(0) {}
-
-    int getAccountNumber()
-    {
-        return accountNumber;
-    }
-    double getBalance()
-    {
-        return balance;
-    }
-    int getTransactionCount()
-    {
-        return transactionCount;
-    }
+    Account();
+    Account(int accNumber);
 
     void deposit(double amount);
     void withdraw(double amount);
-    void addTransaction(const string &type, double amount);
-    void viewMiniStatement();
-    void viewFullStatement();
+    double getBalance();
+    void addTransaction(std::string type, double amount);
 
-    void setAccountNumber(int accNum) { accountNumber = accNum; }
-    void setBalance(double bal)
-    {
-        balance = bal;
-    }
+    int getTransactionCount();
+
+    void printMiniStatement();
+    void printFullStatement();
+    int getMiniStatementCount();
+    int getAccountNumber();
 };
 
 #endif

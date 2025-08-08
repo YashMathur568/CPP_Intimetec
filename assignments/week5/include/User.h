@@ -2,7 +2,6 @@
 #define USER_H
 
 #include <string>
-using namespace std;
 
 enum class UserType
 {
@@ -14,39 +13,23 @@ class User
 {
 protected:
     int userId;
-    string name;
-    string email;
-    string contactNumber;
+    std::string name;
+    int age;
+    std::string email;
+    std::string contactNumber;
+    std::string password;
     UserType userType;
 
 public:
-    User() {}
-    User(int id, string name, string email, string contactNumber, UserType type)
-        : userId(id), name(name), email(email), contactNumber(contactNumber), userType(type) {}
+    User();
+    User(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, UserType userType);
 
-    int getUserId()
-    {
-        return userId;
-    }
-    string getName()
-    {
-        return name;
-    }
-    string getEmail()
-    {
-        return email;
-    }
-    string getContactNumber()
-    {
-        return contactNumber;
-    }
+    bool authenticate(int inputUserId, std::string inputPassword);
 
-    UserType getUserType()
-    {
-        return userType;
-    }
-
-    virtual ~User() {}
+    int getUserId();
+    std::string getName();
+    UserType getUserType();
+    std::string getPassword();
 };
 
 #endif

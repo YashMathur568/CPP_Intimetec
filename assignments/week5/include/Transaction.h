@@ -2,20 +2,20 @@
 #define TRANSACTION_H
 
 #include <string>
-using namespace std;
 
 class Transaction
 {
-public:
-    string type;
+    std::string type;
     double amount;
-    string date;
+    std::string date;
 
-    Transaction(const string t, double amt, const string dt) : type(t), amount(amt), date(dt) {};
+public:
+    Transaction();
+    Transaction(std::string t, double amt, std::string dt);
 
-    string getType();
+    std::string getType();
     double getAmount();
-    string getDate();
+    std::string getDate();
 };
 
 #endif

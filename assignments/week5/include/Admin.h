@@ -2,21 +2,20 @@
 #define ADMIN_H
 
 #include "User.h"
-#include "Bank.h"
 #include "AccountHolder.h"
+#include <string>
+
+class Bank;
 
 class Admin : public User
 {
-private:
-    Bank *bankRef;
-
 public:
-    Admin(int id, string name, string email, string contactNumber, Bank *bank)
-        : User(id, name, email, contactNumber, UserType::Admin), bankRef(bank) {}
+    Admin();
+    Admin(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password);
 
-    void createAccountForAccountHolder(AccountHolder &accountHolder);
-    Account *searchAccountByNumber(int accountNumber);
-    void closeAccount(int accountNumber);
+    bool createAccountForAccountHolder(AccountHolder &accHolder, Bank &bank);
+    Account *searchAccountByNumber(int accNumber, Bank &bank);
+    void closeAccount(int accNumber, Bank &bank);
 };
 
 #endif

@@ -1,44 +1,26 @@
 #ifndef BANK_H
 #define BANK_H
 
-#include "Account.h"
 #include "AccountHolder.h"
-#include <cstdlib>
-#include <ctime>
+#include "Admin.h"
+#include <string>
+
+#define MAX_USERS 100
 
 class Bank
 {
-private:
-    Account accounts[100];
-    AccountHolder accountHolders[50];
-    int accountCount;
+    AccountHolder accountHolders[MAX_USERS];
+    int accountHolderCount;
 
 public:
-    Bank() : accountCount(0)
-    {
-        srand(time(0));
-    }
+    Bank();
 
-    int getRandomUserId()
-    {
-        return rand() % 1000 + 1;
-    }
-    int getRandomAccountNumber()
-    {
-        return rand() % 10000 + 1000;
-    }
-
-    void createAccountForAccountHolder(AccountHolder &accountHolder)
-    {
-        int accountNumber = getRandomAccountNumber();
-        Account newAccount(accountNumber);
-        accountHolders[accountCount++] = accountHolder;
-        accounts[accountCount - 1] = newAccount;
-    }
-
-    bool createAccount(AccountHolder &accountHolder);
-    Account *searchAccountByNumber(int accountNumber);
-    void closeAccount(int accountNumber);
+    bool createAccount(const AccountHolder &accHolder, Admin &admin);
+    Account *searchAccount(int accountNumber, Admin &admin);
+    void closeAccount(int accountNumber, Admin &admin);
+    AccountHolder *loginAccountHolder(int inputUserId, std::string inputPassword);
+    int generateUniqueUserId();
+    int generateUniqueAccountNumber();
 };
 
 #endif
