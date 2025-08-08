@@ -3,6 +3,7 @@
 #include "Bank.h"
 #include "Admin.h"
 #include "AccountHolder.h"
+#include "InputValidation.h"
 
 void showInitialMenu()
 {
@@ -46,8 +47,7 @@ int main()
     {
         showInitialMenu();
         int choice;
-        std::cin >> choice;
-        std::cin.ignore(1000, '\n');
+        choice = getValidatedInt();
 
         switch (choice)
         {
@@ -57,8 +57,7 @@ int main()
             std::string password;
 
             std::cout << "Enter Admin User ID: ";
-            std::cin >> userId;
-            std::cin.ignore(1000, '\n');
+            userId = getValidatedInt();
 
             std::cout << "Enter Password: ";
             std::getline(std::cin, password);
@@ -72,8 +71,7 @@ int main()
                 {
                     showAdminMenu();
                     int adminChoice;
-                    std::cin >> adminChoice;
-                    std::cin.ignore(1000, '\n');
+                    adminChoice = getValidatedInt();
 
                     switch (adminChoice)
                     {
@@ -85,18 +83,37 @@ int main()
                         std::cout << "Enter Name: ";
                         std::getline(std::cin, name);
 
-                        std::cout << "Enter Age: ";
-                        std::cin >> age;
-                        std::cin.ignore(1000, '\n');
+                        do
+                        {
+                            std::cout << "Enter Age: ";
+                            age = getValidatedInt();
+                            if (!isValidAge(age))
+                                std::cout << "Invalid age. Please enter a positive number.\n";
+                        } while (!isValidAge(age));
 
-                        std::cout << "Enter Email: ";
-                        std::getline(std::cin, email);
+                        do
+                        {
+                            std::cout << "Enter Email: ";
+                            std::getline(std::cin, email);
+                            if (!isValidEmail(email))
+                                std::cout << "Invalid email format. Please try again.\n";
+                        } while (!isValidEmail(email));
 
-                        std::cout << "Enter Contact Number: ";
-                        std::getline(std::cin, contact);
+                        do
+                        {
+                            std::cout << "Enter Contact Number: ";
+                            std::getline(std::cin, contact);
+                            if (!isValidContact(contact))
+                                std::cout << "Invalid contact number. It should be 7-15 digits.\n";
+                        } while (!isValidContact(contact));
 
-                        std::cout << "Set Password: ";
-                        std::getline(std::cin, password);
+                        do
+                        {
+                            std::cout << "Set Password (min 6 chars): ";
+                            std::getline(std::cin, password);
+                            if (!isValidPassword(password))
+                                std::cout << "Password too short. Try again.\n";
+                        } while (!isValidPassword(password));
 
                         int userId = bank.generateUniqueUserId();
                         int accountNumber = bank.generateUniqueAccountNumber();
@@ -118,8 +135,7 @@ int main()
                     {
                         int accNum;
                         std::cout << "Enter Account Number to Search: ";
-                        std::cin >> accNum;
-                        std::cin.ignore(1000, '\n');
+                        accNum = getValidatedInt();
 
                         Account *acc = admin.searchAccountByNumber(accNum, bank);
                         if (acc)
@@ -136,9 +152,7 @@ int main()
                     {
                         int accNum;
                         std::cout << "Enter Account Number to Close: ";
-                        std::cin >> accNum;
-                        std::cin.ignore(1000, '\n');
-
+                        accNum = getValidatedInt();
                         admin.closeAccount(accNum, bank);
                         break;
                     }
@@ -162,8 +176,7 @@ int main()
             int userId;
             std::string password;
             std::cout << "Enter User ID: ";
-            std::cin >> userId;
-            std::cin.ignore(1000, '\n');
+            userId = getValidatedInt();
 
             std::cout << "Enter Password: ";
             std::getline(std::cin, password);
@@ -178,29 +191,24 @@ int main()
                 {
                     showAccountHolderMenu();
                     int userChoice;
-                    std::cin >> userChoice;
-                    std::cin.ignore(1000, '\n');
+                    userChoice = getValidatedInt();
 
                     switch (userChoice)
                     {
                     case 1:
                     {
-                        double amt;
+                        double amount;
                         std::cout << "Enter amount to deposit: ";
-                        std::cin >> amt;
-                        std::cin.ignore(1000, '\n');
-
-                        holder->depositToAccount(amt);
+                        amount = getValidatedDouble();
+                        holder->depositToAccount(amount);
                         break;
                     }
                     case 2:
                     {
-                        double amt;
+                        double amount;
                         std::cout << "Enter amount to withdraw: ";
-                        std::cin >> amt;
-                        std::cin.ignore(1000, '\n');
-
-                        holder->withdrawFromAccount(amt);
+                        amount = getValidatedDouble();
+                        holder->withdrawFromAccount(amount);
                         break;
                     }
                     case 3:
