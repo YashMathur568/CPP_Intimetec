@@ -7,15 +7,15 @@ class Transaction
 {
     std::string type;
     double amount;
-    std::string date;
+    std::string datetime;
 
 public:
     Transaction();
-    Transaction(std::string t, double amt, std::string dt);
+    Transaction(std::string type, double amount, std::string datetime);
 
     std::string getType();
     double getAmount();
-    std::string getDate();
+    std::string getDateTime();
 };
 
 #endif

@@ -47,7 +47,9 @@ bool isValidPassword(const std::string &password)
 
 void flushInputBuffer()
 {
-    std::cin.ignore(1000, '\n');
+    while (getchar() != '\n')
+    {
+    };
 }
 
 int getValidatedInt()

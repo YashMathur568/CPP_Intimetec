@@ -53,7 +53,7 @@ void Account::printMiniStatement()
     {
         std::cout << transactions[i].getType() << " - "
                   << transactions[i].getAmount() << " - "
-                  << transactions[i].getDate();
+                  << transactions[i].getDateTime();
     }
 }
 
@@ -63,7 +63,7 @@ void Account::printFullStatement()
     {
         std::cout << transactions[i].getType() << " - "
                   << transactions[i].getAmount() << " - "
-                  << transactions[i].getDate();
+                  << transactions[i].getDateTime();
     }
 }
 

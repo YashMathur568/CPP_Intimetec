@@ -77,7 +77,7 @@ void Bank::closeAccount(int accountNumber, Admin &admin)
         return;
     }
 
-    for (int holderIndex = 0; holderIndex < accountHolderCount; ++holderIndex)
+    for (int holderIndex = 0; holderIndex < accountHolderCount; holderIndex++)
     {
         if (accountHolders[holderIndex].getAccount().getAccountNumber() == accountNumber)
         {

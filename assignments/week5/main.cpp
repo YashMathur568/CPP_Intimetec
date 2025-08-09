@@ -133,14 +133,14 @@ int main()
                     }
                     case 2:
                     {
-                        int accNum;
+                        int accountNumber;
                         std::cout << "Enter Account Number to Search: ";
-                        accNum = getValidatedInt();
+                        accountNumber = getValidatedInt();
 
-                        Account *acc = admin.searchAccountByNumber(accNum, bank);
-                        if (acc)
+                        Account *account = admin.searchAccountByNumber(accountNumber, bank);
+                        if (account)
                         {
-                            std::cout << "Account Found. Balance: " << acc->getBalance() << "\n";
+                            std::cout << "Account Found. Balance: " << account->getBalance() << "\n";
                         }
                         else
                         {
@@ -150,10 +150,10 @@ int main()
                     }
                     case 3:
                     {
-                        int accNum;
+                        int accountNumber;
                         std::cout << "Enter Account Number to Close: ";
-                        accNum = getValidatedInt();
-                        admin.closeAccount(accNum, bank);
+                        accountNumber = getValidatedInt();
+                        admin.closeAccount(accountNumber, bank);
                         break;
                     }
                     case 4:

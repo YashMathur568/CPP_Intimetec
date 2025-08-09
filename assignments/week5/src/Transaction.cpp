@@ -1,9 +1,9 @@
 #include "Transaction.h"
 
-Transaction::Transaction() : type(""), amount(0), date("") {}
+Transaction::Transaction() : type(""), amount(0), datetime("") {}
 
-Transaction::Transaction(std::string t, double amt, std::string dt)
-    : type(t), amount(amt), date(dt) {}
+Transaction::Transaction(std::string type, double amount, std::string datetime)
+    : type(type), amount(amount), datetime(datetime) {}
 
 std::string Transaction::getType()
 {
@@ -15,7 +15,7 @@ double Transaction::getAmount()
     return amount;
 }
 
-std::string Transaction::getDate()
+std::string Transaction::getDateTime()
 {
-    return date;
+    return datetime;
 }
