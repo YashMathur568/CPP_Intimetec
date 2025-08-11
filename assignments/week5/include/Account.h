@@ -17,8 +17,6 @@ class Account
 public:
     Account(int accNumber);
 
-    Account(const Account &other);
-
     ~Account();
 
     void deposit(double amount);

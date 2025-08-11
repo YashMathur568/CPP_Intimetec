@@ -8,23 +8,6 @@ Account::Account(int accNumber)
     transactions = new Transaction *[transactionCapacity];
 }
 
-Account::Account(const Account &other)
-    : accountNumber(other.accountNumber),
-      balance(other.balance),
-      transactionCount(other.transactionCount),
-      transactionCapacity(other.transactionCapacity)
-{
-    transactions = new Transaction *[transactionCapacity];
-
-    for (int transactionIndex = 0; transactionIndex < transactionCount; transactionIndex++)
-    {
-        transactions[transactionIndex] = new Transaction(
-            other.transactions[transactionIndex]->getType(),
-            other.transactions[transactionIndex]->getAmount(),
-            other.transactions[transactionIndex]->getDateTime());
-    }
-}
-
 Account::~Account()
 {
     for (int transactionIndex = 0; transactionIndex < transactionCount; transactionIndex++)
