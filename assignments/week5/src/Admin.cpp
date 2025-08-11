@@ -1,8 +1,5 @@
 #include "Admin.h"
 #include "Bank.h"
-#include <iostream>
-
-Admin::Admin() {}
 
 Admin::Admin(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password)
     : User(userId, name, age, email, contactNumber, password, UserType::Admin) {}

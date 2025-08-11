@@ -21,7 +21,6 @@ protected:
     UserType userType;
 
 public:
-    User();
     User(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, UserType userType);
 
     bool authenticate(int inputUserId, std::string inputPassword);

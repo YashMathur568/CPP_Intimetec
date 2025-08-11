@@ -1,8 +1,6 @@
 #include "AccountHolder.h"
 #include <iostream>
 
-AccountHolder::AccountHolder() : account(nullptr) {}
-
 AccountHolder::AccountHolder(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, int accountNumber)
     : User(userId, name, age, email, contactNumber, password, UserType::AccountHolder)
 {

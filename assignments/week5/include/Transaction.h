@@ -10,7 +10,6 @@ class Transaction
     std::string datetime;
 
 public:
-    Transaction();
     Transaction(std::string type, double amount, std::string datetime);
 
     std::string getType();

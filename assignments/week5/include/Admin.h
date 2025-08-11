@@ -9,7 +9,6 @@ class Bank;
 class Admin : public User
 {
 public:
-    Admin();
     Admin(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password);
 
     bool createAccountForAccountHolder(const AccountHolder &accHolder, Bank &bank);

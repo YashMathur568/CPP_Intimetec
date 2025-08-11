@@ -9,7 +9,6 @@ class AccountHolder : public User
     Account *account;
 
 public:
-    AccountHolder();
     AccountHolder(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, int accountNumber);
 
     AccountHolder(const AccountHolder &other);

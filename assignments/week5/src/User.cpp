@@ -1,7 +1,5 @@
 #include "User.h"
 
-User::User() {}
-
 User::User(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, UserType userType)
     : userId(userId), name(name), age(age), email(email), contactNumber(contactNumber), password(password), userType(userType) {}
 
