@@ -4,9 +4,9 @@
 #include <string>
 
 bool isValidAge(int age);
-bool isValidEmail(const std::string &email);
-bool isValidContact(const std::string &contact);
-bool isValidPassword(const std::string &password);
+bool isValidEmail(std::string &email);
+bool isValidContact(std::string &contact);
+bool isValidPassword(std::string &password);
 void flushInputBuffer();
 int getValidatedInt();
 double getValidatedDouble();

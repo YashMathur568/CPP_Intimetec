@@ -1,22 +1,23 @@
 #include "Admin.h"
 #include "Bank.h"
+#include <iostream>
 
 Admin::Admin() {}
 
 Admin::Admin(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password)
     : User(userId, name, age, email, contactNumber, password, UserType::Admin) {}
 
-bool Admin::createAccountForAccountHolder(AccountHolder &accHolder, Bank &bank)
+bool Admin::createAccountForAccountHolder(const AccountHolder &accHolder, Bank &bank)
 {
     return bank.createAccount(accHolder, *this);
 }
 
-Account *Admin::searchAccountByNumber(int accNumber, Bank &bank)
+Account *Admin::searchAccountByNumber(int accountNumber, Bank &bank)
 {
-    return bank.searchAccount(accNumber, *this);
+    return bank.searchAccount(accountNumber, *this);
 }
 
-void Admin::closeAccount(int accNumber, Bank &bank)
+void Admin::closeAccount(int accountNumber, Bank &bank)
 {
-    bank.closeAccount(accNumber, *this);
+    bank.closeAccount(accountNumber, *this);
 }

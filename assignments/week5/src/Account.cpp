@@ -1,11 +1,38 @@
 #include "Account.h"
 #include <ctime>
 #include <iostream>
-#include <algorithm>
 
-Account::Account() : accountNumber(0), balance(0.0), transactionCount(0) {}
+Account::Account(int accNumber)
+    : accountNumber(accNumber), balance(0.0), transactionCount(0), transactionCapacity(INITIAL_TRANSACTION_COUNT)
+{
+    transactions = new Transaction *[transactionCapacity];
+}
 
-Account::Account(int accNumber) : accountNumber(accNumber), balance(0.0), transactionCount(0) {}
+Account::Account(const Account &other)
+    : accountNumber(other.accountNumber),
+      balance(other.balance),
+      transactionCount(other.transactionCount),
+      transactionCapacity(other.transactionCapacity)
+{
+    transactions = new Transaction *[transactionCapacity];
+
+    for (int transactionIndex = 0; transactionIndex < transactionCount; transactionIndex++)
+    {
+        transactions[transactionIndex] = new Transaction(
+            other.transactions[transactionIndex]->getType(),
+            other.transactions[transactionIndex]->getAmount(),
+            other.transactions[transactionIndex]->getDateTime());
+    }
+}
+
+Account::~Account()
+{
+    for (int transactionIndex = 0; transactionIndex < transactionCount; transactionIndex++)
+    {
+        delete transactions[transactionIndex];
+    }
+    delete[] transactions;
+}
 
 void Account::deposit(double amount)
 {
@@ -33,12 +60,14 @@ double Account::getBalance()
 
 void Account::addTransaction(std::string type, double amount)
 {
-    if (transactionCount < MAX_TRANSACTIONS)
+    if (transactionCount == transactionCapacity)
     {
-        time_t now = time(0);
-        std::string dt = ctime(&now);
-        transactions[transactionCount++] = Transaction(type, amount, dt);
+        resizeTransactions();
     }
+
+    std::time_t currentTime = std::time(0);
+    std::string transactionTime = std::ctime(&currentTime);
+    transactions[transactionCount++] = new Transaction(type, amount, transactionTime);
 }
 
 int Account::getTransactionCount()
@@ -46,24 +75,52 @@ int Account::getTransactionCount()
     return transactionCount;
 }
 
+void Account::resizeTransactions()
+{
+    transactionCapacity *= 2;
+    Transaction **newTransactions = new Transaction *[transactionCapacity];
+
+    for (int transactionIndex = 0; transactionIndex < transactionCount; transactionIndex++)
+    {
+        newTransactions[transactionIndex] = transactions[transactionIndex];
+    }
+
+    delete[] transactions;
+    transactions = newTransactions;
+}
+
 void Account::printMiniStatement()
 {
-    int count = getMiniStatementCount();
-    for (int i = std::max(0, transactionCount - count); i < transactionCount; ++i)
+    if (transactionCount == 0)
     {
-        std::cout << transactions[i].getType() << " - "
-                  << transactions[i].getAmount() << " - "
-                  << transactions[i].getDateTime();
+        std::cout << "No transactions found.\n";
+        return;
+    }
+
+    int miniStatementCount = getMiniStatementCount();
+    for (int transactionIndex = std::max(0, transactionCount - miniStatementCount); transactionIndex < transactionCount; transactionIndex++)
+    {
+        std::cout << transactions[transactionIndex]->getType() << " "
+                  << transactions[transactionIndex]->getAmount() << " - "
+                  << transactions[transactionIndex]->getDateTime();
     }
 }
 
 void Account::printFullStatement()
 {
-    for (int i = 0; i < transactionCount; ++i)
+    if (transactionCount == 0)
     {
-        std::cout << transactions[i].getType() << " - "
-                  << transactions[i].getAmount() << " - "
-                  << transactions[i].getDateTime();
+        std::cout << "No transactions found.\n";
+        return;
+    }
+
+    std::cout << "Showing all transactions:\n";
+
+    for (int transactionIndex = 0; transactionIndex < transactionCount; transactionIndex++)
+    {
+        std::cout << transactions[transactionIndex]->getType() << " "
+                  << transactions[transactionIndex]->getAmount() << " - "
+                  << transactions[transactionIndex]->getDateTime();
     }
 }
 

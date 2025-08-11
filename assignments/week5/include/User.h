@@ -30,6 +30,9 @@ public:
     std::string getName();
     UserType getUserType();
     std::string getPassword();
+    int getAge();
+    std::string getEmail();
+    std::string getContactNumber();
 };
 
 #endif

@@ -39,9 +39,9 @@ void showAccountHolderMenu()
 int main()
 {
     std::srand(std::time(0));
-    Bank bank;
 
-    Admin admin(100001, "Admin", 22, "admin@gamil.com", "9876543210", "adminpass");
+    Bank bank;
+    Admin admin(100001, "Admin", 22, "admin@gmail.com", "9876543210", "adminpass");
 
     while (true)
     {
@@ -127,7 +127,7 @@ int main()
                         }
                         else
                         {
-                            std::cout << "Failed to Create Account (Max limit reached)\n";
+                            std::cout << "Failed to create account!\n";
                         }
                         break;
                     }
@@ -150,10 +150,10 @@ int main()
                     }
                     case 3:
                     {
-                        int accountNumber;
+                        int accNum;
                         std::cout << "Enter Account Number to Close: ";
-                        accountNumber = getValidatedInt();
-                        admin.closeAccount(accountNumber, bank);
+                        accNum = getValidatedInt();
+                        admin.closeAccount(accNum, bank);
                         break;
                     }
                     case 4:
@@ -200,7 +200,15 @@ int main()
                         double amount;
                         std::cout << "Enter amount to deposit: ";
                         amount = getValidatedDouble();
-                        holder->depositToAccount(amount);
+                        if (amount > 0)
+                        {
+                            holder->depositToAccount(amount);
+                            std::cout << "Amount deposited successfully!\n";
+                        }
+                        else
+                        {
+                            std::cout << "Invalid amount!\n";
+                        }
                         break;
                     }
                     case 2:
@@ -208,16 +216,25 @@ int main()
                         double amount;
                         std::cout << "Enter amount to withdraw: ";
                         amount = getValidatedDouble();
-                        holder->withdrawFromAccount(amount);
+                        if (amount > 0)
+                        {
+                            holder->withdrawFromAccount(amount);
+                        }
+                        else
+                        {
+                            std::cout << "Invalid amount!\n";
+                        }
                         break;
                     }
                     case 3:
                         std::cout << "Current Balance: " << holder->checkBalance() << "\n";
                         break;
                     case 4:
+                        std::cout << "\n *** Mini Statement ***\n";
                         holder->viewMiniStatement();
                         break;
                     case 5:
+                        std::cout << "\n *** Full Statement ***\n";
                         holder->viewFullStatement();
                         break;
                     case 6:
@@ -236,7 +253,7 @@ int main()
         }
 
         case 3:
-            std::cout << "Thank you for using the Banking Service\n";
+            std::cout << "Thank you for using the Banking Service!\n";
             return 0;
 
         default:

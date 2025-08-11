@@ -29,3 +29,18 @@ std::string User::getPassword()
 {
     return password;
 }
+
+int User::getAge()
+{
+    return age;
+}
+
+std::string User::getEmail()
+{
+    return email;
+}
+
+std::string User::getContactNumber()
+{
+    return contactNumber;
+}

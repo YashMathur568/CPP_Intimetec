@@ -3,15 +3,18 @@
 
 #include "User.h"
 #include "Account.h"
-#include <string>
 
 class AccountHolder : public User
 {
-    Account account;
+    Account *account;
 
 public:
     AccountHolder();
     AccountHolder(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, int accountNumber);
+
+    AccountHolder(const AccountHolder &other);
+
+    ~AccountHolder();
 
     void depositToAccount(double amount);
     void withdrawFromAccount(double amount);

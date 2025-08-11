@@ -4,18 +4,22 @@
 #include "Transaction.h"
 #include <string>
 
-#define MAX_TRANSACTIONS 1000
+#define INITIAL_TRANSACTION_COUNT 10
 
 class Account
 {
     int accountNumber;
     double balance;
-    Transaction transactions[MAX_TRANSACTIONS];
+    Transaction **transactions;
     int transactionCount;
+    int transactionCapacity;
 
 public:
-    Account();
     Account(int accNumber);
+
+    Account(const Account &other);
+
+    ~Account();
 
     void deposit(double amount);
     void withdraw(double amount);
@@ -23,6 +27,7 @@ public:
     void addTransaction(std::string type, double amount);
 
     int getTransactionCount();
+    void resizeTransactions();
 
     void printMiniStatement();
     void printFullStatement();

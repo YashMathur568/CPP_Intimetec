@@ -1,7 +1,20 @@
 #include "Bank.h"
 #include <iostream>
 
-Bank::Bank() : accountHolderCount(0) {}
+Bank::Bank()
+    : accountHolderCount(0), accountHolderCapacity(INITIAL_ACCOUNTHOLDER_COUNT)
+{
+    accountHolders = new AccountHolder *[accountHolderCapacity];
+}
+
+Bank::~Bank()
+{
+    for (int accountHolderIndex = 0; accountHolderIndex < accountHolderCount; ++accountHolderIndex)
+    {
+        delete accountHolders[accountHolderIndex];
+    }
+    delete[] accountHolders;
+}
 
 int Bank::generateUniqueUserId()
 {
@@ -11,9 +24,9 @@ int Bank::generateUniqueUserId()
     {
         userId = rand() % 9000 + 1000;
         exists = false;
-        for (int holderIndex = 0; holderIndex < accountHolderCount; holderIndex++)
+        for (int accountHolderIndex = 0; accountHolderIndex < accountHolderCount; accountHolderIndex++)
         {
-            if (accountHolders[holderIndex].getUserId() == userId)
+            if (accountHolders[accountHolderIndex]->getUserId() == userId)
             {
                 exists = true;
                 break;
@@ -31,9 +44,9 @@ int Bank::generateUniqueAccountNumber()
     {
         accountNumber = rand() % 900000 + 100000;
         exists = false;
-        for (int holderIndex = 0; holderIndex < accountHolderCount; holderIndex++)
+        for (int accountHolderIndex = 0; accountHolderIndex < accountHolderCount; accountHolderIndex++)
         {
-            if (accountHolders[holderIndex].getAccount().getAccountNumber() == accountNumber)
+            if (accountHolders[accountHolderIndex]->getAccount().getAccountNumber() == accountNumber)
             {
                 exists = true;
                 break;
@@ -48,12 +61,14 @@ bool Bank::createAccount(const AccountHolder &accHolder, Admin &admin)
     if (admin.getUserType() != UserType::Admin)
         return false;
 
-    if (accountHolderCount < MAX_USERS)
+    if (accountHolderCount == accountHolderCapacity)
     {
-        accountHolders[accountHolderCount++] = accHolder;
-        return true;
+        resizeAccountHolders();
     }
-    return false;
+
+    accountHolders[accountHolderCount++] = new AccountHolder(accHolder);
+
+    return true;
 }
 
 Account *Bank::searchAccount(int accountNumber, Admin &admin)
@@ -61,10 +76,10 @@ Account *Bank::searchAccount(int accountNumber, Admin &admin)
     if (admin.getUserType() != UserType::Admin)
         return nullptr;
 
-    for (int holderIndex = 0; holderIndex < accountHolderCount; holderIndex++)
+    for (int accountHolderIndex = 0; accountHolderIndex < accountHolderCount; accountHolderIndex++)
     {
-        if (accountHolders[holderIndex].getAccount().getAccountNumber() == accountNumber)
-            return &accountHolders[holderIndex].getAccount();
+        if (accountHolders[accountHolderIndex]->getAccount().getAccountNumber() == accountNumber)
+            return &accountHolders[accountHolderIndex]->getAccount();
     }
     return nullptr;
 }
@@ -77,30 +92,46 @@ void Bank::closeAccount(int accountNumber, Admin &admin)
         return;
     }
 
-    for (int holderIndex = 0; holderIndex < accountHolderCount; holderIndex++)
+    for (int accountHolderIndex = 0; accountHolderIndex < accountHolderCount; accountHolderIndex++)
     {
-        if (accountHolders[holderIndex].getAccount().getAccountNumber() == accountNumber)
+        if (accountHolders[accountHolderIndex]->getAccount().getAccountNumber() == accountNumber)
         {
-            for (int shiftIndex = holderIndex; shiftIndex < accountHolderCount - 1; shiftIndex++)
+            delete accountHolders[accountHolderIndex];
+            for (int shiftIndex = accountHolderIndex; shiftIndex < accountHolderCount - 1; shiftIndex++)
             {
                 accountHolders[shiftIndex] = accountHolders[shiftIndex + 1];
             }
             accountHolderCount--;
-            std::cout << "Account Closed Successfully\n";
+            std::cout << "Account closed successfully\n";
             return;
         }
     }
-    std::cout << "Account Not Found!\n";
+
+    std::cout << "Account not found!\n";
 }
 
 AccountHolder *Bank::loginAccountHolder(int inputUserId, std::string inputPassword)
 {
-    for (int holderIndex = 0; holderIndex < accountHolderCount; holderIndex++)
+    for (int accountHolderIndex = 0; accountHolderIndex < accountHolderCount; accountHolderIndex++)
     {
-        if (accountHolders[holderIndex].authenticate(inputUserId, inputPassword))
+        if (accountHolders[accountHolderIndex]->authenticate(inputUserId, inputPassword))
         {
-            return &accountHolders[holderIndex];
+            return accountHolders[accountHolderIndex];
         }
     }
     return nullptr;
+}
+
+void Bank::resizeAccountHolders()
+{
+    accountHolderCapacity *= 2;
+
+    AccountHolder **newAccountHolders = new AccountHolder *[accountHolderCapacity];
+    for (int accountHolderIndex = 0; accountHolderIndex < accountHolderCount; accountHolderIndex++)
+    {
+        newAccountHolders[accountHolderIndex] = accountHolders[accountHolderIndex];
+    }
+
+    delete[] accountHolders;
+    accountHolders = newAccountHolders;
 }

@@ -6,50 +6,48 @@ bool isValidAge(int age)
     return age > 0;
 }
 
-bool isValidEmail(const std::string &email)
+bool isValidEmail(std::string &email)
 {
-    int CountofAt = 0;
+    int atCount = 0;
     bool dotAfterAt = false;
     bool atFound = false;
 
-    for (int i = 0; i < email.size(); i++)
+    for (int index = 0; index < email.size(); index++)
     {
-        if (email[i] == ' ')
+        if (email[index] == ' ')
             return false;
-        if (email[i] == '@')
+        if (email[index] == '@')
         {
-            CountofAt++;
+            atCount++;
             atFound = true;
         }
-        if (atFound && email[i] == '.')
+        if (atFound && email[index] == '.')
             dotAfterAt = true;
     }
-    return CountofAt == 1 && dotAfterAt;
+    return atCount == 1 && dotAfterAt;
 }
 
-bool isValidContact(const std::string &contact)
+bool isValidContact(std::string &contact)
 {
     if (contact.length() < 7 || contact.length() > 15)
         return false;
 
-    for (int i = 0; i < contact.length(); ++i)
+    for (int digitIndex = 0; digitIndex < contact.length(); ++digitIndex)
     {
-        if (contact[i] < '0' || contact[i] > '9')
+        if (contact[digitIndex] < '0' || contact[digitIndex] > '9')
             return false;
     }
     return true;
 }
 
-bool isValidPassword(const std::string &password)
+bool isValidPassword(std::string &password)
 {
     return password.length() >= 6;
 }
 
 void flushInputBuffer()
 {
-    while (getchar() != '\n')
-    {
-    };
+    std::cin.ignore(1000, '\n');
 }
 
 int getValidatedInt()
