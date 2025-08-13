@@ -9,21 +9,18 @@ int main()
     std::cout << "Enter index to print (0 - 2): ";
     std::cin >> index;
 
-    // Bug 1: No bounds checking on array
-    std::cout << "You picked: " << names[index] << std::endl;
+    std::cout << " Picked: " << names[index] << std::endl;
 
-    // Bug 2: Division by zero possible
     int x, y;
-    std::cout << "Enter two integers (x y): ";
+    std::cout << "Enter two integers: ";
     std::cin >> x >> y;
 
-    int result = x / y; // Possible divide-by-zero crash
+    int result = x / y;
     std::cout << "Result: " << result << std::endl;
 
-    // Bug 3: Dangling pointer
-    int *ptr = new int(42);
+    int *ptr = new int(34);
     delete ptr;
-    std::cout << "Dangling pointer value: " << *ptr << std::endl; // Undefined behavior
+    std::cout << "Dangling pointer value: " << *ptr << std::endl;
 
     return 0;
 }
