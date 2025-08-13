@@ -13,6 +13,7 @@ class Account
     Transaction **transactions;
     int transactionCount;
     int transactionCapacity;
+    void addTransaction(std::string type, double amount);
 
 public:
     Account(int accNumber);
@@ -22,7 +23,6 @@ public:
     void deposit(double amount);
     void withdraw(double amount);
     double getBalance();
-    void addTransaction(std::string type, double amount);
 
     int getTransactionCount();
     void resizeTransactions();

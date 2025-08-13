@@ -62,7 +62,7 @@ int main()
             std::cout << "Enter Password: ";
             std::getline(std::cin, password);
 
-            if (userId == admin.getUserId() && password == admin.getPassword())
+            if (admin.authenticate(userId, password))
             {
                 std::cout << "Admin Login Successful!\n";
                 bool adminSession = true;

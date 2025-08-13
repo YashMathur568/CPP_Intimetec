@@ -23,11 +23,6 @@ UserType User::getUserType()
     return userType;
 }
 
-std::string User::getPassword()
-{
-    return password;
-}
-
 int User::getAge()
 {
     return age;
