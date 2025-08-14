@@ -1,3 +1,4 @@
+// xmlParser.cpp
 #include "xmlParser.h"
 
 xmlParser::xmlParser() {}
@@ -55,23 +56,27 @@ void xmlParser::traverseElements(tinyxml2::XMLElement *currentElement, const std
         std::cout << ")";
     }
 
-    std::cout << std::endl;
-
     tinyxml2::XMLElement *childElement = currentElement->FirstChildElement();
 
     if (!childElement)
     {
-
         const char *text = currentElement->GetText();
         if (text && strlen(text) > 0)
         {
-            std::cout << indentation << "  " << text << std::endl;
+            std::cout << ": " << text << std::endl;
+        }
+        else
+        {
+            std::cout << std::endl;
         }
         return;
     }
 
+    std::cout << std::endl;
+
     std::string firstChildName = childElement->Name();
     bool allSameName = true;
+    int childCount = 0;
     tinyxml2::XMLElement *temp = childElement;
 
     while (temp != nullptr)
@@ -81,6 +86,46 @@ void xmlParser::traverseElements(tinyxml2::XMLElement *currentElement, const std
             allSameName = false;
             break;
         }
+        childCount++;
         temp = temp->NextSiblingElement();
+    }
+
+    if (allSameName && childCount > 1)
+    {
+        bool allHaveSimpleText = true;
+        temp = childElement;
+        while (temp != nullptr)
+        {
+            if (temp->FirstChildElement() != nullptr)
+            {
+                allHaveSimpleText = false;
+                break;
+            }
+            temp = temp->NextSiblingElement();
+        }
+
+        if (allHaveSimpleText)
+        {
+            std::cout << indentation << "  " << firstChildName << ": ";
+            bool first = true;
+            while (childElement != nullptr)
+            {
+                if (!first)
+                    std::cout << ", ";
+                const char *text = childElement->GetText();
+                if (text)
+                    std::cout << text;
+                first = false;
+                childElement = childElement->NextSiblingElement();
+            }
+            std::cout << std::endl;
+            return;
+        }
+    }
+
+    while (childElement != nullptr)
+    {
+        traverseElements(childElement, indentation + "  ");
+        childElement = childElement->NextSiblingElement();
     }
 }
