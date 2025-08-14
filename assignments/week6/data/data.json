@@ -1,0 +1,33 @@
+[
+  {
+    "company": "Intimetec",
+    "employees": [
+      {
+        "id": 101,
+        "name": "Yash Mathur",
+        "age": 23,
+        "department": "Engineering",
+        "skills": ["C++", "React", "Javascript"],
+        "address": {
+          "street": "Sirsi Road",
+          "city": "Jaipur",
+          "zipcode": "302028"
+        },
+        "is_manager": false
+      },
+      {
+        "id": 102,
+        "name": "Tushar Sharma",
+        "age": 22,
+        "department": "Marketing",
+        "skills": ["SEO", "Content Creation", "Brand Strategy"],
+        "address": {
+          "street": "Mohanpura",
+          "city": "Jaipur",
+          "zipcode": "302034"
+        },
+        "is_manager": true
+      }
+    ]
+  }
+]

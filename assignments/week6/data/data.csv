@@ -1,0 +1,3 @@
+company,id,name,age,department,skills,street,city,zipcode,is_manager
+Intimetec,101,Yash Mathur,22,Engineering,"C++,React,Javascript",Sirsi Road,Jaipur,302028,false
+Intimetec,102,Tushar Sharma,22,Marketing,"SEO,Content Creation,Brand Strategy",Mohanpura,Jaipur,302034,true
