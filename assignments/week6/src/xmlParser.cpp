@@ -1,4 +1,3 @@
-// xmlParser.cpp
 #include "xmlParser.h"
 
 xmlParser::xmlParser() {}
