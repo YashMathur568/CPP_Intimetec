@@ -8,7 +8,7 @@ class FileParser
 public:
     virtual ~FileParser() {}
 
-    virtual void openFile(const std::string &filePath) = 0;
+    virtual void openFile(std::string &filePath) = 0;
 
     virtual void parse() = 0;
 };

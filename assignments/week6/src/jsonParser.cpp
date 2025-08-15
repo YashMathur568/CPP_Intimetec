@@ -4,7 +4,7 @@ jsonParser::jsonParser() {}
 
 jsonParser::~jsonParser() {}
 
-void jsonParser::openFile(const std::string &filePath)
+void jsonParser::openFile(std::string &filePath)
 {
     try
     {
@@ -27,38 +27,44 @@ void jsonParser::parse()
     printJson(parsedData, "");
 }
 
-void jsonParser::printJson(const nlohmann::json &jsonData, const std::string &indent)
+void jsonParser::printJson(nlohmann::json &jsonData, const std::string &indent)
 {
     if (jsonData.is_object())
     {
-        for (nlohmann::json::const_iterator objIterator = jsonData.begin(); objIterator != jsonData.end(); ++objIterator)
+        for (nlohmann::json::iterator iterator = jsonData.begin(); iterator != jsonData.end(); iterator++)
         {
-            std::cout << indent << objIterator.key() << ": ";
-            if (objIterator.value().is_primitive())
+            std::string key = iterator.key();
+            nlohmann::json value = iterator.value();
+
+            std::cout << indent << key << ": ";
+            if (value.is_primitive())
             {
-                std::cout << objIterator.value() << std::endl;
+                std::cout << value << std::endl;
             }
             else
             {
                 std::cout << std::endl;
-                printJson(objIterator.value(), indent + "  ");
+                printJson(value, indent + "  ");
             }
         }
     }
     else if (jsonData.is_array())
     {
-        int elementIndex = 0;
-        for (nlohmann::json::const_iterator arrIterator = jsonData.begin(); arrIterator != jsonData.end(); ++arrIterator)
+        int arraySize = jsonData.size();
+
+        for (int i = 0; i < arraySize; ++i)
         {
-            std::cout << indent << "[" << elementIndex++ << "]: ";
-            if (arrIterator->is_primitive())
+            std::cout << indent << "[" << i << "]: ";
+            nlohmann::json element = jsonData[i];
+
+            if (element.is_primitive())
             {
-                std::cout << *arrIterator << std::endl;
+                std::cout << element << std::endl;
             }
             else
             {
                 std::cout << std::endl;
-                printJson(*arrIterator, indent + "  ");
+                printJson(element, indent + "  ");
             }
         }
     }

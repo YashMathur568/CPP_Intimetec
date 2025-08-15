@@ -4,7 +4,7 @@ xmlParser::xmlParser() {}
 
 xmlParser::~xmlParser() {}
 
-void xmlParser::openFile(const std::string &filePath)
+void xmlParser::openFile(std::string &filePath)
 {
     try
     {

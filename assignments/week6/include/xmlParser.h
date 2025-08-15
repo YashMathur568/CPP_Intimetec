@@ -14,7 +14,7 @@ public:
     xmlParser();
     ~xmlParser();
 
-    void openFile(const std::string &filePath) override;
+    void openFile(std::string &filePath) override;
 
     void parse() override;
 

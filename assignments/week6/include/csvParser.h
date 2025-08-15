@@ -18,12 +18,12 @@ private:
 public:
     csvParser();
     ~csvParser();
-    void openFile(const std::string &filePath) override;
+    void openFile(std::string &filePath) override;
     void parse() override;
 
 private:
-    void printRow(const std::string row[], int rowSize);
-    void processLine(const std::string &line, int rowIndex);
+    void printRow(std::string row[], int rowSize);
+    void processLine(std::string &line, int rowIndex);
     void calculateColumnWidths();
 };
 

@@ -4,7 +4,7 @@ csvParser::csvParser() : totalRows(0) {}
 
 csvParser::~csvParser() {}
 
-void csvParser::openFile(const std::string &filePath)
+void csvParser::openFile(std::string &filePath)
 {
     try
     {
@@ -43,7 +43,7 @@ void csvParser::parse()
     file.close();
 }
 
-void csvParser::processLine(const std::string &line, int rowIndex)
+void csvParser::processLine(std::string &line, int rowIndex)
 {
     int columnIndex = 0;
     bool insideQuotes = false;
@@ -87,7 +87,7 @@ void csvParser::calculateColumnWidths()
     }
 }
 
-void csvParser::printRow(const std::string row[], int rowSize)
+void csvParser::printRow(std::string row[], int rowSize)
 {
     for (int columnIndex = 0; columnIndex < rowSize && row[columnIndex] != ""; ++columnIndex)
     {
