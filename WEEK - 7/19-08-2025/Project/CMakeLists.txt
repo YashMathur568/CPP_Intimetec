@@ -10,8 +10,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Adding the path to the source files
 add_executable(my_project
-    src/main.cpp
-    src/fib.cpp
+    src/sayHello.cpp
+    src/UserDefinedType.cpp
+    src/stringcheck.cpp
 )
 
 enable_testing()
@@ -21,8 +22,9 @@ add_subdirectory(googletest)
 
 # Adding test executable
 add_executable(test_example
-    test/test_example.cpp
-    test/fib_test.cpp
+    test/testHello.cpp
+    test/UserDefinedTypeTest.cpp
+    test/stringcheckTest.cpp
     )
 
 # Linking GoogleTest to the test executable
