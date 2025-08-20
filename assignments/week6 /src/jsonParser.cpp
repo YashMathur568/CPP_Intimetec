@@ -1,10 +1,6 @@
 #include "jsonParser.h"
 
-jsonParser::jsonParser() {}
-
-jsonParser::~jsonParser() {}
-
-void jsonParser::openFile(std::string &filePath)
+void jsonParser::openFile(const std::string &filePath)
 {
     try
     {
@@ -17,7 +13,7 @@ void jsonParser::openFile(std::string &filePath)
     }
     catch (const std::exception &e)
     {
-        throw std::runtime_error("Error reading JSON file: " + std::string(e.what()));
+        throw std::runtime_error("Error reading JSON file");
     }
 }
 
@@ -52,10 +48,10 @@ void jsonParser::printJson(nlohmann::json &jsonData, const std::string &indent)
     {
         int arraySize = jsonData.size();
 
-        for (int i = 0; i < arraySize; ++i)
+        for (int index = 0; index < arraySize; index++)
         {
-            std::cout << indent << "[" << i << "]: ";
-            nlohmann::json element = jsonData[i];
+            std::cout << indent << "[" << index << "]: ";
+            nlohmann::json element = jsonData[index];
 
             if (element.is_primitive())
             {

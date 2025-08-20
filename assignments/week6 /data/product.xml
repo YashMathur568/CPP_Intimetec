@@ -1,0 +1,41 @@
+<store>
+  <name>GadgetStore</name>
+  <location>Downtown</location>
+  <products>
+    <product>
+      <product_id>101</product_id>
+      <name>Smartphone</name>
+      <category>Electronics</category>
+      <price>699.99</price>
+      <in_stock>true</in_stock>
+      <specifications>
+        <brand>TechGiant</brand>
+        <screen_size>6.5 inches</screen_size>
+        <battery_life>12 hours</battery_life>
+      </specifications>
+    </product>
+    <product>
+      <product_id>102</product_id>
+      <name>Bluetooth Headphones</name>
+      <category>Accessories</category>
+      <price>149.99</price>
+      <in_stock>false</in_stock>
+      <specifications>
+        <brand>AudioMax</brand>
+        <battery_life>20 hours</battery_life>
+      </specifications>
+    </product>
+    <product>
+      <product_id>103</product_id>
+      <name>Laptop</name>
+      <category>Computers</category>
+      <price>1299.99</price>
+      <in_stock>true</in_stock>
+      <specifications>
+        <brand>SuperTech</brand>
+        <processor>Intel i7</processor>
+        <ram>16GB</ram>
+      </specifications>
+    </product>
+  </products>
+</store>

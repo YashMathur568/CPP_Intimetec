@@ -1,0 +1,4 @@
+product_id,name,category,price,in_stock,brand,screen_size,battery_life,processor,ram
+101,Smartphone,Electronics,699.99,true,TechGiant,6.5 inches,12 hours,,
+102,Bluetooth Headphones,Accessories,149.99,false,AudioMax,,20 hours,,
+103,Laptop,Computers,1299.99,true,SuperTech,,,Intel i7,16GB

@@ -1,17 +1,13 @@
 #include "xmlParser.h"
 
-xmlParser::xmlParser() {}
-
-xmlParser::~xmlParser() {}
-
-void xmlParser::openFile(std::string &filePath)
+void xmlParser::openFile(const std::string &filePath)
 {
     try
     {
         tinyxml2::XMLError result = doc.LoadFile(filePath.c_str());
         if (result != tinyxml2::XML_SUCCESS)
         {
-            throw std::runtime_error("Failed to load XML file: " + filePath + " (Error code: " + std::to_string(result) + ")");
+            throw std::runtime_error("Failed to load XML file: " + filePath);
         }
     }
     catch (const std::exception &e)
@@ -110,10 +106,14 @@ void xmlParser::traverseElements(tinyxml2::XMLElement *currentElement, const std
             while (childElement != nullptr)
             {
                 if (!first)
+                {
                     std::cout << ", ";
+                }
                 const char *text = childElement->GetText();
                 if (text)
+                {
                     std::cout << text;
+                }
                 first = false;
                 childElement = childElement->NextSiblingElement();
             }

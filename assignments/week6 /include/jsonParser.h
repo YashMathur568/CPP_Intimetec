@@ -2,7 +2,7 @@
 #define JSONPARSER_H
 
 #include "fileParser.h"
-#include "./json.hpp"
+#include "json.hpp"
 #include <fstream>
 #include <iostream>
 
@@ -12,10 +12,7 @@ private:
     nlohmann::json parsedData;
 
 public:
-    jsonParser();
-    ~jsonParser();
-
-    void openFile(std::string &filePath) override;
+    void openFile(const std::string &filePath) override;
 
     void parse() override;
 
