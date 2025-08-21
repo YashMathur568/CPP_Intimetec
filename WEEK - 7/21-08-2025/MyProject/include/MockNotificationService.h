@@ -4,7 +4,6 @@
 #include <gmock/gmock.h>
 #include "NotificationService.h"
 
-// Mock class to simulate NotificationService
 class MockNotificationService : public NotificationService
 {
 public:
