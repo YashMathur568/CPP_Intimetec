@@ -1,10 +1,13 @@
 #include "AccountHolder.h"
+#include "Account.h"
 #include <iostream>
 
-AccountHolder::AccountHolder(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, int accountNumber)
-    : User(userId, name, age, email, contactNumber, password, UserType::AccountHolder)
+AccountHolder::AccountHolder(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, AccountInterface *account)
+    : User(userId, name, age, email, contactNumber, password, UserType::AccountHolder), account(account) {}
+
+AccountHolder::~AccountHolder()
 {
-    account = new Account(accountNumber);
+    delete account;
 }
 
 AccountHolder::AccountHolder(const AccountHolder &other)
@@ -18,11 +21,6 @@ AccountHolder::AccountHolder(const AccountHolder &other)
     {
         account = nullptr;
     }
-}
-
-AccountHolder::~AccountHolder()
-{
-    delete account;
 }
 
 void AccountHolder::depositToAccount(double amount)

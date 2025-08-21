@@ -2,17 +2,15 @@
 #define ACCOUNTHOLDER_H
 
 #include "User.h"
-#include "Account.h"
+#include "AccountInterface.h"
 
 class AccountHolder : public User
 {
-    Account *account;
+private:
+    AccountInterface *account;
 
 public:
-    AccountHolder(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, int accountNumber);
-
-    AccountHolder(const AccountHolder &other);
-
+    AccountHolder(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, AccountInterface *account);
     ~AccountHolder();
 
     void depositToAccount(double amount);
@@ -20,7 +18,7 @@ public:
     double checkBalance();
     void viewMiniStatement();
     void viewFullStatement();
-    Account &getAccount();
+    AccountInterface *getAccount();
 };
 
 #endif

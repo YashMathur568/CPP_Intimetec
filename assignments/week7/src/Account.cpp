@@ -1,4 +1,5 @@
 #include "Account.h"
+#include "Transaction.h"
 #include <ctime>
 #include <iostream>
 
@@ -20,7 +21,9 @@ Account::~Account()
 void Account::deposit(double amount)
 {
     balance += amount;
-    addTransaction("Deposit", amount);
+
+    TransactionInterface *transaction = new Transaction("Deposit", amount, std::ctime(nullptr));
+    addTransaction(transaction);
 }
 
 void Account::withdraw(double amount)
@@ -28,7 +31,8 @@ void Account::withdraw(double amount)
     if (amount <= balance)
     {
         balance -= amount;
-        addTransaction("Withdraw", amount);
+        ITransaction *transaction = new Transaction("Withdraw", amount, std::ctime(nullptr));
+        addTransaction(transaction);
     }
     else
     {
@@ -36,32 +40,20 @@ void Account::withdraw(double amount)
     }
 }
 
-double Account::getBalance()
-{
-    return balance;
-}
-
-void Account::addTransaction(std::string type, double amount)
+void Account::addTransaction(ITransaction *transaction)
 {
     if (transactionCount == transactionCapacity)
     {
         resizeTransactions();
     }
 
-    std::time_t currentTime = std::time(0);
-    std::string transactionTime = std::ctime(&currentTime);
-    transactions[transactionCount++] = new Transaction(type, amount, transactionTime);
-}
-
-int Account::getTransactionCount()
-{
-    return transactionCount;
+    transactions[transactionCount++] = transaction;
 }
 
 void Account::resizeTransactions()
 {
     transactionCapacity *= 2;
-    Transaction **newTransactions = new Transaction *[transactionCapacity];
+    ITransaction **newTransactions = new ITransaction *[transactionCapacity];
 
     for (int transactionIndex = 0; transactionIndex < transactionCount; transactionIndex++)
     {
@@ -80,7 +72,7 @@ void Account::printMiniStatement()
         return;
     }
 
-    int miniStatementCount = getMiniStatementCount();
+    int miniStatementCount = std::min(transactionCount, 5);
     for (int transactionIndex = std::max(0, transactionCount - miniStatementCount); transactionIndex < transactionCount; transactionIndex++)
     {
         std::cout << transactions[transactionIndex]->getType() << " "
@@ -107,12 +99,17 @@ void Account::printFullStatement()
     }
 }
 
-int Account::getMiniStatementCount()
+double Account::getBalance()
 {
-    return std::min(transactionCount, 5);
+    return balance;
 }
 
-int Account::getAccountNumber()
+int Account::getTransactionCount()
+{
+    return transactionCount;
+}
+
+int Account::getAccountNumber() const
 {
     return accountNumber;
 }
