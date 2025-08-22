@@ -1,8 +1,8 @@
 #include <iostream>
 #include <ctime>
 #include "Bank.h"
-#include "Account.h"
 #include "Admin.h"
+#include "Account.h"
 #include "AccountHolder.h"
 #include "InputValidation.h"
 
@@ -42,7 +42,7 @@ int main()
     std::srand(std::time(0));
 
     Bank bank;
-    Admin admin(100001, "Admin", 22, "admin@gmail.com", "9876543210", "adminpass");
+    Admin admin(100001, "Admin", 22, "admin@gmail.com", "9876543210", "adminpass", bank);
 
     while (true)
     {
@@ -121,7 +121,7 @@ int main()
 
                         AccountHolder accHolder(userId, name, age, email, contact, password, accountNumber);
 
-                        if (admin.createAccountForAccountHolder(accHolder, bank))
+                        if (admin.createAccountForAccountHolder(accHolder))
                         {
                             std::cout << "Account Created Successfully!\n";
                             std::cout << "User ID: " << userId << ", Account Number: " << accountNumber << "\n";
@@ -138,7 +138,7 @@ int main()
                         std::cout << "Enter Account Number to Search: ";
                         accountNumber = getValidatedInt();
 
-                        Account *account = admin.searchAccountByNumber(accountNumber, bank);
+                        Account *account = admin.searchAccountByNumber(accountNumber);
                         if (account)
                         {
                             std::cout << "Account Found. Balance: " << account->getBalance() << "\n";
@@ -154,7 +154,7 @@ int main()
                         int accNum;
                         std::cout << "Enter Account Number to Close: ";
                         accNum = getValidatedInt();
-                        admin.closeAccount(accNum, bank);
+                        admin.closeAccount(accNum);
                         break;
                     }
                     case 4:

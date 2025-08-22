@@ -8,7 +8,7 @@ protected:
 
     void SetUp() override
     {
-        user = new User(12345, "Ramesh", 30, "ramesh@example.com", "1234567890", "password123", UserType::AccountHolder);
+        user = new User(12345, "Bhavesh Kumar", 30, "Bhavesh@gmail.com", "1234567890", "password123", UserType::AccountHolder);
     }
 
     void TearDown() override
@@ -20,9 +20,9 @@ protected:
 TEST_F(UserTest, ConstructorInitializesAllFields)
 {
     EXPECT_EQ(user->getUserId(), 12345);
-    EXPECT_EQ(user->getName(), "Ramesh");
+    EXPECT_EQ(user->getName(), "Bhavesh Kumar");
     EXPECT_EQ(user->getAge(), 30);
-    EXPECT_EQ(user->getEmail(), "ramesh@example.com");
+    EXPECT_EQ(user->getEmail(), "Bhavesh@gmail.com");
     EXPECT_EQ(user->getContactNumber(), "1234567890");
     EXPECT_EQ(user->getUserType(), UserType::AccountHolder);
 }

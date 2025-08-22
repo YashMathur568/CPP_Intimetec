@@ -5,19 +5,16 @@
 #include "interfaces/IBank.h"
 
 class AccountHolder;
+class Account;
 
 class Admin : public User
 {
 private:
-    IBank *bank;
+    IBank &bank;
 
 public:
     Admin(int userId, std::string name, int age, std::string email,
-          std::string contactNumber, std::string password, IBank *bank = nullptr);
-
-    bool createAccountForAccountHolder(const AccountHolder &accHolder, IBank &bank);
-    Account *searchAccountByNumber(int accountNumber, IBank &bank);
-    void closeAccount(int accountNumber, IBank &bank);
+          std::string contactNumber, std::string password, IBank &bank);
 
     bool createAccountForAccountHolder(const AccountHolder &accHolder);
     Account *searchAccountByNumber(int accountNumber);

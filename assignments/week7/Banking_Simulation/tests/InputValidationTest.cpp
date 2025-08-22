@@ -116,7 +116,7 @@ TEST_F(InputValidationTest, ValidPassword)
 TEST_F(InputValidationTest, InvalidPasswordTooShort)
 {
     std::string invalidPassword1 = "12345";
-    std::string invalidPassword2 = "acsc";
+    std::string invalidPassword2 = "abc";
     std::string invalidPassword3 = "";
 
     EXPECT_FALSE(isValidPassword(invalidPassword1));

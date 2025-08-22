@@ -7,9 +7,9 @@ find_package(GTest REQUIRED)
 include(GoogleTest)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/interfaces
-    ${CMAKE_SOURCE_DIR}/src/mocks
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/include/interfaces
+    ${CMAKE_SOURCE_DIR}/include/mocks
     ${GTEST_INCLUDE_DIRS}
 )
 
@@ -33,7 +33,6 @@ set(TEST_SOURCES
     tests/AdminTest.cpp
     tests/BankTest.cpp
     tests/IntegrationTest.cpp
-    tests/TestRunner.cpp
 )
 
 add_executable(BankingSystemTests 
@@ -41,12 +40,20 @@ add_executable(BankingSystemTests
     ${TEST_SOURCES}
 )
 
+add_executable(BankingApp 
+    ${SOURCES}
+    main.cpp
+)
 
 target_link_libraries(BankingSystemTests 
     GTest::gtest
     GTest::gtest_main
     GTest::gmock
     GTest::gmock_main
+    pthread
+)
+
+target_link_libraries(BankingApp 
     pthread
 )
 
