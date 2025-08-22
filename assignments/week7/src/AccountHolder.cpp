@@ -2,24 +2,43 @@
 #include "Account.h"
 #include <iostream>
 
-AccountHolder::AccountHolder(int userId, std::string name, int age, std::string email, std::string contactNumber, std::string password, AccountInterface *account)
-    : User(userId, name, age, email, contactNumber, password, UserType::AccountHolder), account(account) {}
-
-AccountHolder::~AccountHolder()
+AccountHolder::AccountHolder(int userId, std::string name, int age, std::string email,
+                             std::string contactNumber, std::string password, int accountNumber,
+                             IAccount *account)
+    : User(userId, name, age, email, contactNumber, password, UserType::AccountHolder),
+      account(account)
 {
-    delete account;
+    if (this->account == nullptr)
+    {
+        this->account = new Account(accountNumber);
+        ownsAccount = true;
+    }
+    else
+    {
+        ownsAccount = false;
+    }
 }
 
 AccountHolder::AccountHolder(const AccountHolder &other)
     : User(other.userId, other.name, other.age, other.email, other.contactNumber, other.password, other.userType)
 {
-    if (other.account != nullptr)
+    if (other.account != nullptr && other.ownsAccount)
     {
         account = new Account(other.account->getAccountNumber());
+        ownsAccount = true;
     }
     else
     {
-        account = nullptr;
+        account = other.account;
+        ownsAccount = false;
+    }
+}
+
+AccountHolder::~AccountHolder()
+{
+    if (ownsAccount)
+    {
+        delete account;
     }
 }
 
@@ -64,7 +83,7 @@ void AccountHolder::viewFullStatement()
     }
 }
 
-Account &AccountHolder::getAccount()
+IAccount &AccountHolder::getAccount()
 {
     return *account;
 }

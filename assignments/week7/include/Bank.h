@@ -1,14 +1,15 @@
 #ifndef BANK_H
 #define BANK_H
 
-#include "BankInterface.h"
 #include "AccountHolder.h"
 #include "Admin.h"
+#include "interfaces/IBank.h"
 
 #define INITIAL_ACCOUNTHOLDER_COUNT 10
 
-class Bank : public BankInterface
+class Bank : public IBank
 {
+private:
     AccountHolder **accountHolders;
     int accountHolderCount;
     int accountHolderCapacity;
@@ -23,7 +24,7 @@ public:
     AccountHolder *loginAccountHolder(int inputUserId, std::string inputPassword) override;
     int generateUniqueUserId() override;
     int generateUniqueAccountNumber() override;
-    void resizeAccountHolders() override;
+    void resizeAccountHolders();
 };
 
 #endif

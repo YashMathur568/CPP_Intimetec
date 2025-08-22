@@ -1,11 +1,10 @@
 #ifndef MOCKBANK_H
 #define MOCKBANK_H
 
-#include "gmock/gmock.h"
-#include "Account.h"
-#include "BankInterface.h"
+#include "interfaces/IBank.h"
+#include <gmock/gmock.h>
 
-class MockBank : public BankInterface
+class MockBank : public IBank
 {
 public:
     MOCK_METHOD(bool, createAccount, (const AccountHolder &accHolder, Admin &admin), (override));
@@ -14,7 +13,6 @@ public:
     MOCK_METHOD(AccountHolder *, loginAccountHolder, (int inputUserId, std::string inputPassword), (override));
     MOCK_METHOD(int, generateUniqueUserId, (), (override));
     MOCK_METHOD(int, generateUniqueAccountNumber, (), (override));
-    MOCK_METHOD(void, resizeAccountHolders, (), (override));
 };
 
 #endif

@@ -1,12 +1,10 @@
 #ifndef TRANSACTION_H
 #define TRANSACTION_H
 
-#include "TransactionInterface.h"
 #include <string>
 
-class Transaction : public TransactionInterface
+class Transaction
 {
-private:
     std::string type;
     double amount;
     std::string datetime;
@@ -14,9 +12,9 @@ private:
 public:
     Transaction(std::string type, double amount, std::string datetime);
 
-    std::string getType() const override;
-    double getAmount() const override;
-    std::string getDateTime() const override;
+    std::string getType();
+    double getAmount();
+    std::string getDateTime();
 };
 
 #endif

@@ -3,17 +3,17 @@
 Transaction::Transaction(std::string type, double amount, std::string datetime)
     : type(type), amount(amount), datetime(datetime) {}
 
-std::string Transaction::getType() const
+std::string Transaction::getType()
 {
     return type;
 }
 
-double Transaction::getAmount() const
+double Transaction::getAmount()
 {
     return amount;
 }
 
-std::string Transaction::getDateTime() const
+std::string Transaction::getDateTime()
 {
     return datetime;
 }

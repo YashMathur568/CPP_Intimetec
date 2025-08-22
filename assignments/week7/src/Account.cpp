@@ -1,12 +1,22 @@
 #include "Account.h"
-#include "Transaction.h"
-#include <ctime>
+#include "TimeService.h"
 #include <iostream>
 
-Account::Account(int accNumber)
-    : accountNumber(accNumber), balance(0.0), transactionCount(0), transactionCapacity(INITIAL_TRANSACTION_COUNT)
+Account::Account(int accNumber, ITimeService *timeService)
+    : accountNumber(accNumber), balance(0.0), transactionCount(0),
+      transactionCapacity(INITIAL_TRANSACTION_COUNT), timeService(timeService)
 {
     transactions = new Transaction *[transactionCapacity];
+
+    if (this->timeService == nullptr)
+    {
+        this->timeService = new TimeService();
+        ownsTimeService = true;
+    }
+    else
+    {
+        ownsTimeService = false;
+    }
 }
 
 Account::~Account()
@@ -16,14 +26,17 @@ Account::~Account()
         delete transactions[transactionIndex];
     }
     delete[] transactions;
+
+    if (ownsTimeService)
+    {
+        delete timeService;
+    }
 }
 
 void Account::deposit(double amount)
 {
     balance += amount;
-
-    TransactionInterface *transaction = new Transaction("Deposit", amount, std::ctime(nullptr));
-    addTransaction(transaction);
+    addTransaction("Deposit", amount);
 }
 
 void Account::withdraw(double amount)
@@ -31,8 +44,7 @@ void Account::withdraw(double amount)
     if (amount <= balance)
     {
         balance -= amount;
-        ITransaction *transaction = new Transaction("Withdraw", amount, std::ctime(nullptr));
-        addTransaction(transaction);
+        addTransaction("Withdraw", amount);
     }
     else
     {
@@ -40,20 +52,31 @@ void Account::withdraw(double amount)
     }
 }
 
-void Account::addTransaction(ITransaction *transaction)
+void Account::addTransaction(std::string type, double amount)
 {
     if (transactionCount == transactionCapacity)
     {
         resizeTransactions();
     }
 
-    transactions[transactionCount++] = transaction;
+    std::string transactionTime = timeService->getCurrentTime();
+    transactions[transactionCount++] = new Transaction(type, amount, transactionTime);
+}
+
+double Account::getBalance()
+{
+    return balance;
+}
+
+int Account::getTransactionCount()
+{
+    return transactionCount;
 }
 
 void Account::resizeTransactions()
 {
     transactionCapacity *= 2;
-    ITransaction **newTransactions = new ITransaction *[transactionCapacity];
+    Transaction **newTransactions = new Transaction *[transactionCapacity];
 
     for (int transactionIndex = 0; transactionIndex < transactionCount; transactionIndex++)
     {
@@ -72,8 +95,9 @@ void Account::printMiniStatement()
         return;
     }
 
-    int miniStatementCount = std::min(transactionCount, 5);
-    for (int transactionIndex = std::max(0, transactionCount - miniStatementCount); transactionIndex < transactionCount; transactionIndex++)
+    int miniStatementCount = getMiniStatementCount();
+    for (int transactionIndex = std::max(0, transactionCount - miniStatementCount);
+         transactionIndex < transactionCount; transactionIndex++)
     {
         std::cout << transactions[transactionIndex]->getType() << " "
                   << transactions[transactionIndex]->getAmount() << " - "
@@ -99,17 +123,12 @@ void Account::printFullStatement()
     }
 }
 
-double Account::getBalance()
+int Account::getMiniStatementCount()
 {
-    return balance;
+    return std::min(transactionCount, 5);
 }
 
-int Account::getTransactionCount()
-{
-    return transactionCount;
-}
-
-int Account::getAccountNumber() const
+int Account::getAccountNumber()
 {
     return accountNumber;
 }

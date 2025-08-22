@@ -1,5 +1,5 @@
 #include "Bank.h"
-#include "AccountHolder.h"
+#include "Account.h"
 #include <iostream>
 
 Bank::Bank()
@@ -80,7 +80,7 @@ Account *Bank::searchAccount(int accountNumber, Admin &admin)
     for (int accountHolderIndex = 0; accountHolderIndex < accountHolderCount; accountHolderIndex++)
     {
         if (accountHolders[accountHolderIndex]->getAccount().getAccountNumber() == accountNumber)
-            return &accountHolders[accountHolderIndex]->getAccount();
+            return dynamic_cast<Account*>(&accountHolders[accountHolderIndex]->getAccount());
     }
     return nullptr;
 }

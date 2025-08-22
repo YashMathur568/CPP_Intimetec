@@ -1,18 +1,19 @@
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include "AccountHolder.h"
-#include "MockAccount.h"
+#include "mocks/MockAccount.h"
 
 class AccountHolderTest : public ::testing::Test
 {
 protected:
-    MockAccount *mockAccount;
     AccountHolder *accountHolder;
+    MockAccount *mockAccount;
 
     void SetUp() override
     {
         mockAccount = new MockAccount();
-        accountHolder = new AccountHolder(1001, "John Doe", 30, "john.doe@gmail.com", "1234567890", "password123", mockAccount);
+        accountHolder = new AccountHolder(12345, "Ramesh", 30, "ramesh@test.com",
+                                          "1234567890", "password123", 654321, mockAccount);
     }
 
     void TearDown() override
@@ -22,33 +23,66 @@ protected:
     }
 };
 
-TEST_F(AccountHolderTest, DepositTest)
+TEST_F(AccountHolderTest, ConstructorInitializesUserFieldsCorrectly)
 {
-    double depositAmount = 100.0;
-
-    EXPECT_CALL(*mockAccount, deposit(depositAmount))
-        .Times(1);
-
-    accountHolder->depositToAccount(depositAmount);
+    EXPECT_EQ(accountHolder->getUserId(), 12345);
+    EXPECT_EQ(accountHolder->getName(), "Ramesh");
+    EXPECT_EQ(accountHolder->getAge(), 30);
+    EXPECT_EQ(accountHolder->getEmail(), "ramesh@test.com");
+    EXPECT_EQ(accountHolder->getContactNumber(), "1234567890");
+    EXPECT_EQ(accountHolder->getUserType(), UserType::AccountHolder);
 }
 
-TEST_F(AccountHolderTest, WithdrawTest)
+TEST_F(AccountHolderTest, DepositDelegatesToAccount)
 {
-    double withdrawAmount = 50.0;
-
-    EXPECT_CALL(*mockAccount, withdraw(withdrawAmount))
+    EXPECT_CALL(*mockAccount, deposit(100.0))
         .Times(1);
 
-    accountHolder->withdrawFromAccount(withdrawAmount);
+    accountHolder->depositToAccount(100.0);
 }
 
-TEST_F(AccountHolderTest, CheckBalanceTest)
+TEST_F(AccountHolderTest, WithdrawDelegatesToAccount)
 {
-    double balance = 200.0;
+    EXPECT_CALL(*mockAccount, withdraw(50.0))
+        .Times(1);
 
+    accountHolder->withdrawFromAccount(50.0);
+}
+
+TEST_F(AccountHolderTest, CheckBalanceDelegatesToAccount)
+{
     EXPECT_CALL(*mockAccount, getBalance())
-        .Times(1)
-        .WillOnce(testing::Return(balance));
+        .WillOnce(::testing::Return(150.0));
 
-    EXPECT_EQ(accountHolder->checkBalance(), balance);
+    double balance = accountHolder->checkBalance();
+    EXPECT_DOUBLE_EQ(balance, 150.0);
+}
+
+TEST_F(AccountHolderTest, ViewMiniStatementDelegatesToAccount)
+{
+    EXPECT_CALL(*mockAccount, printMiniStatement())
+        .Times(1);
+
+    accountHolder->viewMiniStatement();
+}
+
+TEST_F(AccountHolderTest, ViewFullStatementDelegatesToAccount)
+{
+    EXPECT_CALL(*mockAccount, printFullStatement())
+        .Times(1);
+
+    accountHolder->viewFullStatement();
+}
+
+TEST_F(AccountHolderTest, GetAccountReturnsCorrectReference)
+{
+    IAccount &account = accountHolder->getAccount();
+    EXPECT_EQ(&account, mockAccount);
+}
+
+TEST_F(AccountHolderTest, AuthenticationWorks)
+{
+    EXPECT_TRUE(accountHolder->authenticate(12345, "password123"));
+    EXPECT_FALSE(accountHolder->authenticate(12345, "wrongpass"));
+    EXPECT_FALSE(accountHolder->authenticate(54321, "password123"));
 }

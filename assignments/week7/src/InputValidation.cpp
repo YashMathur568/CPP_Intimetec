@@ -3,7 +3,7 @@
 
 bool isValidAge(int age)
 {
-    return (age > 0 && age < 200);
+    return age > 0;
 }
 
 bool isValidEmail(std::string &email)

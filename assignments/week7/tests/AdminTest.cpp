@@ -1,57 +1,77 @@
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include "Admin.h"
-#include "MockBank.h"
+#include "mocks/MockBank.h"
+#include "AccountHolder.h"
 
 class AdminTest : public ::testing::Test
 {
 protected:
     Admin *admin;
     MockBank *mockBank;
+    AccountHolder *testAccountHolder;
 
     void SetUp() override
     {
         mockBank = new MockBank();
-        admin = new Admin(100001, "Admin", 22, "admin@gmail.com", "9876543210", "adminpass");
+        admin = new Admin(100001, "Admin User", 35, "admin@bank.com",
+                          "9876543210", "adminpass", mockBank);
+
+        // Create a test account holder for testing
+        testAccountHolder = new AccountHolder(12345, "Test User", 25, "test@example.com",
+                                              "1234567890", "testpass", 654321);
     }
 
     void TearDown() override
     {
         delete admin;
         delete mockBank;
+        delete testAccountHolder;
     }
 };
 
-TEST_F(AdminTest, CreateAccountForAccountHolder)
+TEST_F(AdminTest, ConstructorInitializesAdminUser)
 {
-    AccountHolder accHolder(1001, "Ramesh Kumar", 30, "rameshKumar@gmail.com", "1234567890", "pass@123", 10001);
+    EXPECT_EQ(admin->getUserId(), 100001);
+    EXPECT_EQ(admin->getName(), "Admin User");
+    EXPECT_EQ(admin->getUserType(), UserType::Admin);
+    EXPECT_TRUE(admin->authenticate(100001, "adminpass"));
+}
 
-    EXPECT_CALL(*mockBank, createAccount(accHolder, *admin))
-        .Times(1)
+TEST_F(AdminTest, CreateAccountDelegatesToBank)
+{
+    EXPECT_CALL(*mockBank, createAccount(::testing::Ref(*testAccountHolder), ::testing::Ref(*admin)))
         .WillOnce(::testing::Return(true));
 
-    bool result = mockBank->createAccount(accHolder, *admin);
+    bool result = admin->createAccountForAccountHolder(*testAccountHolder);
     EXPECT_TRUE(result);
 }
 
-TEST_F(AdminTest, SearchAccountByNumber)
+TEST_F(AdminTest, SearchAccountDelegatesToBank)
 {
-    int accountNumber = 10001;
-    Account mockAccount(accountNumber);
+    Account *expectedAccount = reinterpret_cast<Account *>(0x12345);
 
-    EXPECT_CALL(*mockBank, searchAccount(accountNumber, *admin))
-        .Times(1)
-        .WillOnce(::testing::Return(&mockAccount));
+    EXPECT_CALL(*mockBank, searchAccount(654321, ::testing::Ref(*admin)))
+        .WillOnce(::testing::Return(expectedAccount));
 
-    Account *account = mockBank->searchAccount(accountNumber, *admin);
-    EXPECT_EQ(account->getAccountNumber(), accountNumber);
+    Account *result = admin->searchAccountByNumber(654321);
+    EXPECT_EQ(result, expectedAccount);
 }
 
-TEST_F(AdminTest, CloseAccount)
+TEST_F(AdminTest, CloseAccountDelegatesToBank)
 {
-    int accountNumber = 10001;
-
-    EXPECT_CALL(*mockBank, closeAccount(accountNumber, *admin))
+    EXPECT_CALL(*mockBank, closeAccount(654321, ::testing::Ref(*admin)))
         .Times(1);
 
-    mockBank->closeAccount(accountNumber, *admin);
+    admin->closeAccount(654321);
+}
+
+TEST_F(AdminTest, CreateAccountWithExternalBankReference)
+{
+    MockBank externalBank;
+    EXPECT_CALL(externalBank, createAccount(::testing::Ref(*testAccountHolder), ::testing::Ref(*admin)))
+        .WillOnce(::testing::Return(false));
+
+    bool result = admin->createAccountForAccountHolder(*testAccountHolder, externalBank);
+    EXPECT_FALSE(result);
 }
