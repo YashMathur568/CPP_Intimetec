@@ -36,7 +36,7 @@ AccountHolder::AccountHolder(const AccountHolder &other)
 
 AccountHolder::~AccountHolder()
 {
-    if (ownsAccount)
+    if (ownsAccount && account)
     {
         delete account;
     }

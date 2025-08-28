@@ -34,6 +34,9 @@ public:
     void printFullStatement() override;
     int getMiniStatementCount();
     int getAccountNumber() override;
+
+    int getTransactionCapacity();
+    void setBalance(double newBalance);
 };
 
 #endif

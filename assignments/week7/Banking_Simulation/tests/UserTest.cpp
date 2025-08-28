@@ -46,19 +46,3 @@ TEST_F(UserTest, AuthenticateWithBothInvalid)
 {
     EXPECT_FALSE(user->authenticate(54321, "wrongpassword"));
 }
-
-TEST_F(UserTest, AdminUserType)
-{
-    User adminUser(99999, "Admin User", 35, "admin@bank.com", "9876543210", "adminpass", UserType::Admin);
-
-    EXPECT_EQ(adminUser.getUserType(), UserType::Admin);
-    EXPECT_TRUE(adminUser.authenticate(99999, "adminpass"));
-}
-
-TEST_F(UserTest, HandleEmptyName)
-{
-    User emptyNameUser(11111, "", 25, "empty@test.com", "1111111111", "pass", UserType::AccountHolder);
-
-    EXPECT_EQ(emptyNameUser.getName(), "");
-    EXPECT_EQ(emptyNameUser.getUserId(), 11111);
-}

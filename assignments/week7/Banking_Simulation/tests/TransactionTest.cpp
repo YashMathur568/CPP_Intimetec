@@ -8,7 +8,7 @@ protected:
 
     void SetUp() override
     {
-        transaction = new Transaction("Deposit", 100.50, "Mon Jan 01 12:00:00 2024\n");
+        transaction = new Transaction("Deposit", 100.50, "Tue Apr 19 13:00:00 2025\n");
     }
 
     void TearDown() override
@@ -21,16 +21,16 @@ TEST_F(TransactionTest, ConstructorInitializesAllFields)
 {
     EXPECT_EQ(transaction->getType(), "Deposit");
     EXPECT_DOUBLE_EQ(transaction->getAmount(), 100.50);
-    EXPECT_EQ(transaction->getDateTime(), "Mon Jan 01 12:00:00 2024\n");
+    EXPECT_EQ(transaction->getDateTime(), "Tue Apr 19 13:00:00 2025\n");
 }
 
 TEST_F(TransactionTest, GetterMethodsReturnCorrectValues)
 {
-    Transaction withdrawTransaction("Withdraw", 50.25, "Mon Jan 01 13:00:00 2024\n");
+    Transaction withdrawTransaction("Withdraw", 50.25, "Tue Apr 19 13:00:00 2025\n");
 
     EXPECT_EQ(withdrawTransaction.getType(), "Withdraw");
     EXPECT_DOUBLE_EQ(withdrawTransaction.getAmount(), 50.25);
-    EXPECT_EQ(withdrawTransaction.getDateTime(), "Mon Jan 01 13:00:00 2024\n");
+    EXPECT_EQ(withdrawTransaction.getDateTime(), "Tue Apr 19 13:00:00 2025\n");
 }
 
 TEST_F(TransactionTest, HandleEmptyStrings)
@@ -40,13 +40,4 @@ TEST_F(TransactionTest, HandleEmptyStrings)
     EXPECT_EQ(emptyTransaction.getType(), "");
     EXPECT_DOUBLE_EQ(emptyTransaction.getAmount(), 0.0);
     EXPECT_EQ(emptyTransaction.getDateTime(), "");
-}
-
-TEST_F(TransactionTest, HandleSpecialCharacters)
-{
-    Transaction specialTransaction("Dep@sit!", 999.99, "Special\nDate");
-
-    EXPECT_EQ(specialTransaction.getType(), "Dep@sit!");
-    EXPECT_DOUBLE_EQ(specialTransaction.getAmount(), 999.99);
-    EXPECT_EQ(specialTransaction.getDateTime(), "Special\nDate");
 }

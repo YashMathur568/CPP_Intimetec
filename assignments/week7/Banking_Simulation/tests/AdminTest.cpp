@@ -14,7 +14,7 @@ protected:
     void SetUp() override
     {
         mockBank = new MockBank();
-        admin = new Admin(100001, "Admin User", 35, "admin@bank.com", "9876543210", "adminpass", static_cast<IBank&>(*mockBank));
+        admin = new Admin(100001, "Admin User", 35, "admin@bank.com", "9876543210", "adminpass", *mockBank);
         testAccountHolder = new AccountHolder(12345, "Test User", 25, "test@gmail.com", "1234567890", "testpass", 654321, nullptr);
     }
 

@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(AccountTest, ConstructorInitializesCorrectly)
+TEST_F(AccountTest, ConstructorInitializesAccountCorrectly)
 {
     EXPECT_EQ(account->getAccountNumber(), 123456);
     EXPECT_DOUBLE_EQ(account->getBalance(), 0.0);
@@ -31,7 +31,7 @@ TEST_F(AccountTest, ConstructorInitializesCorrectly)
 
 TEST_F(AccountTest, DepositIncreasesBalanceAndCreatesTransaction)
 {
-    EXPECT_CALL(*mockTimeService, getCurrentTime()).WillOnce(::testing::Return("Mon Jan 01 12:00:00 2024\n"));
+    EXPECT_CALL(*mockTimeService, getCurrentTime()).WillOnce(::testing::Return("Tue Apr 19 13:00:00 2025\n"));
 
     account->deposit(100.0);
 
@@ -41,7 +41,7 @@ TEST_F(AccountTest, DepositIncreasesBalanceAndCreatesTransaction)
 
 TEST_F(AccountTest, MultipleDepositsIncreaseBothBalanceAndTransactionCount)
 {
-    EXPECT_CALL(*mockTimeService, getCurrentTime()).Times(3).WillRepeatedly(::testing::Return("Mon Jan 01 12:00:00 2024\n"));
+    EXPECT_CALL(*mockTimeService, getCurrentTime()).Times(3).WillRepeatedly(::testing::Return("Tue Apr 19 13:00:00 2025\n"));
 
     account->deposit(100.0);
     account->deposit(50.0);
@@ -53,7 +53,7 @@ TEST_F(AccountTest, MultipleDepositsIncreaseBothBalanceAndTransactionCount)
 
 TEST_F(AccountTest, WithdrawDecreasesBalanceAndCreatesTransaction)
 {
-    EXPECT_CALL(*mockTimeService, getCurrentTime()).Times(2).WillRepeatedly(::testing::Return("Mon Jan 01 12:00:00 2024\n"));
+    EXPECT_CALL(*mockTimeService, getCurrentTime()).Times(2).WillRepeatedly(::testing::Return("Tue Apr 19 13:00:00 2025\n"));
 
     account->deposit(200.0);
     account->withdraw(50.0);
@@ -66,7 +66,7 @@ TEST_F(AccountTest, WithdrawExactBalanceAmount)
 {
     EXPECT_CALL(*mockTimeService, getCurrentTime())
         .Times(2)
-        .WillRepeatedly(::testing::Return("Mon Jan 01 12:00:00 2024\n"));
+        .WillRepeatedly(::testing::Return("Tue Apr 19 13:00:00 2025\n"));
 
     account->deposit(100.0);
     account->withdraw(100.0);
@@ -86,7 +86,7 @@ TEST_F(AccountTest, WithdrawWithInsufficientFunds)
 TEST_F(AccountTest, WithdrawMoreThanBalanceAfterDeposit)
 {
     EXPECT_CALL(*mockTimeService, getCurrentTime())
-        .WillOnce(::testing::Return("Mon Jan 01 12:00:00 2024\n"));
+        .WillOnce(::testing::Return("Tue Apr 19 13:00:00 2025\n"));
 
     account->deposit(50.0);
     account->withdraw(100.0);
@@ -99,7 +99,7 @@ TEST_F(AccountTest, GetMiniStatementCountWithFewTransactions)
 {
     EXPECT_CALL(*mockTimeService, getCurrentTime())
         .Times(3)
-        .WillRepeatedly(::testing::Return("Mon Jan 01 12:00:00 2024\n"));
+        .WillRepeatedly(::testing::Return("Tue Apr 19 13:00:00 2025\n"));
 
     account->deposit(100.0);
     account->deposit(50.0);
@@ -112,7 +112,7 @@ TEST_F(AccountTest, GetMiniStatementCountWithManyTransactions)
 {
     EXPECT_CALL(*mockTimeService, getCurrentTime())
         .Times(7)
-        .WillRepeatedly(::testing::Return("Mon Jan 01 12:00:00 2024\n"));
+        .WillRepeatedly(::testing::Return("Tue Apr 19 13:00:00 2025\n"));
 
     for (int i = 0; i < 7; i++)
     {
@@ -124,15 +124,47 @@ TEST_F(AccountTest, GetMiniStatementCountWithManyTransactions)
 
 TEST_F(AccountTest, TransactionArrayResizing)
 {
-    EXPECT_CALL(*mockTimeService, getCurrentTime())
-        .Times(15)
-        .WillRepeatedly(::testing::Return("Mon Jan 01 12:00:00 2024\n"));
+    EXPECT_EQ(account->getTransactionCapacity(), 10);
 
-    for (int i = 0; i < 15; i++)
+    EXPECT_CALL(*mockTimeService, getCurrentTime())
+        .Times(10)
+        .WillRepeatedly(::testing::Return("Tue Apr 19 13:00:00 2025\n"));
+
+    for (int i = 0; i < 10; i++)
     {
         account->deposit(10.0);
     }
 
-    EXPECT_EQ(account->getTransactionCount(), 15);
-    EXPECT_DOUBLE_EQ(account->getBalance(), 150.0);
+    EXPECT_EQ(account->getTransactionCount(), 10);
+    EXPECT_EQ(account->getTransactionCapacity(), 10);
+
+    EXPECT_CALL(*mockTimeService, getCurrentTime())
+        .WillOnce(::testing::Return("Tue Apr 19 13:00:00 2025\n"));
+
+    account->deposit(10.0);
+
+    EXPECT_EQ(account->getTransactionCount(), 11);
+    EXPECT_EQ(account->getTransactionCapacity(), 20);
+    EXPECT_DOUBLE_EQ(account->getBalance(), 110.0);
+
+    EXPECT_CALL(*mockTimeService, getCurrentTime())
+        .Times(9)
+        .WillRepeatedly(::testing::Return("Tue Apr 19 13:00:00 2025\n"));
+
+    for (int i = 0; i < 9; i++)
+    {
+        account->deposit(10.0);
+    }
+
+    EXPECT_EQ(account->getTransactionCount(), 20);
+    EXPECT_EQ(account->getTransactionCapacity(), 20);
+
+    EXPECT_CALL(*mockTimeService, getCurrentTime())
+        .WillOnce(::testing::Return("Tue Apr 19 13:00:00 2025\n"));
+
+    account->deposit(10.0);
+
+    EXPECT_EQ(account->getTransactionCount(), 21);
+    EXPECT_EQ(account->getTransactionCapacity(), 40);
+    EXPECT_DOUBLE_EQ(account->getBalance(), 210.0);
 }

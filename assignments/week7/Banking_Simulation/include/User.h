@@ -27,7 +27,7 @@ public:
 
     int getUserId();
     std::string getName();
-    UserType getUserType();
+    UserType getUserType() const;
     int getAge();
     std::string getEmail();
     std::string getContactNumber();

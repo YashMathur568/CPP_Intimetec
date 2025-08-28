@@ -132,3 +132,13 @@ int Account::getAccountNumber()
 {
     return accountNumber;
 }
+
+int Account::getTransactionCapacity()
+{
+    return transactionCapacity;
+}
+
+void Account::setBalance(double newBalance)
+{
+    balance = newBalance;
+}

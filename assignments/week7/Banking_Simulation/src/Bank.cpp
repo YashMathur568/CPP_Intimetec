@@ -1,5 +1,6 @@
 #include "Bank.h"
 #include "Account.h"
+#include "AccountHolder.h"
 #include <iostream>
 
 Bank::Bank()
@@ -57,9 +58,9 @@ int Bank::generateUniqueAccountNumber()
     return accountNumber;
 }
 
-bool Bank::createAccount(const AccountHolder &accHolder, Admin &admin)
+bool Bank::createAccount(const AccountHolder &accHolder, const User &user)
 {
-    if (admin.getUserType() != UserType::Admin)
+    if (user.getUserType() != UserType::Admin)
         return false;
 
     if (accountHolderCount == accountHolderCapacity)
@@ -72,22 +73,22 @@ bool Bank::createAccount(const AccountHolder &accHolder, Admin &admin)
     return true;
 }
 
-Account *Bank::searchAccount(int accountNumber, Admin &admin)
+Account *Bank::searchAccount(int accountNumber, const User &user)
 {
-    if (admin.getUserType() != UserType::Admin)
+    if (user.getUserType() != UserType::Admin)
         return nullptr;
 
     for (int accountHolderIndex = 0; accountHolderIndex < accountHolderCount; accountHolderIndex++)
     {
         if (accountHolders[accountHolderIndex]->getAccount().getAccountNumber() == accountNumber)
-            return dynamic_cast<Account*>(&accountHolders[accountHolderIndex]->getAccount());
+            return dynamic_cast<Account *>(&accountHolders[accountHolderIndex]->getAccount());
     }
     return nullptr;
 }
 
-void Bank::closeAccount(int accountNumber, Admin &admin)
+void Bank::closeAccount(int accountNumber, const User &user)
 {
-    if (admin.getUserType() != UserType::Admin)
+    if (user.getUserType() != UserType::Admin)
     {
         std::cout << "Permission denied! Only admins can close accounts.\n";
         return;
@@ -135,4 +136,9 @@ void Bank::resizeAccountHolders()
 
     delete[] accountHolders;
     accountHolders = newAccountHolders;
+}
+
+int Bank::getAccountHolderCount()
+{
+    return accountHolderCount;
 }

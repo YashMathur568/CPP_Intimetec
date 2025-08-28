@@ -5,6 +5,7 @@
 #include "Account.h"
 #include "AccountHolder.h"
 #include "InputValidation.h"
+#include <unistd.h>
 
 void showInitialMenu()
 {
@@ -60,8 +61,7 @@ int main()
             std::cout << "Enter Admin User ID: ";
             userId = getValidatedInt();
 
-            std::cout << "Enter Password: ";
-            std::getline(std::cin, password);
+            password = getpass("Enter your password: ");
 
             if (admin.authenticate(userId, password))
             {
@@ -110,8 +110,8 @@ int main()
 
                         do
                         {
-                            std::cout << "Set Password (min 6 chars): ";
-                            std::getline(std::cin, password);
+                            password = getpass("Set Password (min 6 chars): ");
+
                             if (!isValidPassword(password))
                                 std::cout << "Password too short. Try again.\n";
                         } while (!isValidPassword(password));

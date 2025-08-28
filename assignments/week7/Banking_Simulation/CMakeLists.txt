@@ -4,13 +4,11 @@ project(BankingSystemTests)
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(GTest REQUIRED)
-include(GoogleTest)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/include/interfaces
     ${CMAKE_SOURCE_DIR}/include/mocks
-    ${GTEST_INCLUDE_DIRS}
 )
 
 set(SOURCES
@@ -50,12 +48,4 @@ target_link_libraries(BankingSystemTests
     GTest::gtest_main
     GTest::gmock
     GTest::gmock_main
-    pthread
 )
-
-target_link_libraries(BankingApp 
-    pthread
-)
-
-enable_testing()
-add_test(NAME BankingSystemTests COMMAND BankingSystemTests)

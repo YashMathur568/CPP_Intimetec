@@ -18,7 +18,7 @@ std::string User::getName()
     return name;
 }
 
-UserType User::getUserType()
+UserType User::getUserType() const
 {
     return userType;
 }

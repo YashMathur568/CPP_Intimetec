@@ -23,11 +23,6 @@ public:
     void viewMiniStatement();
     void viewFullStatement();
     IAccount &getAccount();
-
-    int getUserId() { return User::getUserId(); }
-    std::string getName() { return User::getName(); }
-    UserType getUserType() { return User::getUserType(); }
-    bool authenticate(int userId, std::string password) { return User::authenticate(userId, password); }
 };
 
 #endif

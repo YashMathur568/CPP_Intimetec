@@ -30,8 +30,7 @@ protected:
 
 TEST_F(BankTest, ConstructorInitializesEmptyBank)
 {
-    AccountHolder *result = bank->loginAccountHolder(12345, "anypass");
-    EXPECT_EQ(result, nullptr);
+    EXPECT_EQ(bank->getAccountHolderCount(), 0);
 }
 
 TEST_F(BankTest, CreateAccountSuccessfully)
@@ -48,12 +47,11 @@ TEST_F(BankTest, CreateAccountSuccessfully)
 
 TEST_F(BankTest, CreateAccountFailsForNonAdmin)
 {
-    User regularUser(12345, "Regular User", 30, "user@example.com", "1234567890", "userpass", UserType::AccountHolder);
-
     AccountHolder testHolder(54321, "Test User", 25, "test@example.com", "1234567890", "testpass", 654321, nullptr);
+    User nonAdminUser(100002, "NotAdmin", 30, "user@example.com", "1234567890", "userpass", UserType::AccountHolder);
 
-    bool result = bank->createAccount(testHolder, *admin);
-    EXPECT_TRUE(result);
+    bool result = bank->createAccount(testHolder, nonAdminUser);
+    EXPECT_FALSE(result);
 }
 
 TEST_F(BankTest, SearchAccountFindsExistingAccount)
@@ -118,31 +116,33 @@ TEST_F(BankTest, LoginWithInvalidCredentials)
 
 TEST_F(BankTest, GenerateUniqueUserIds)
 {
-    std::set<int> generatedIds;
-
+    int ids[100];
     for (int i = 0; i < 100; i++)
     {
         int userId = bank->generateUniqueUserId();
         EXPECT_GE(userId, 1000);
         EXPECT_LE(userId, 9999);
-
-        EXPECT_EQ(generatedIds.find(userId), generatedIds.end());
-        generatedIds.insert(userId);
+        for (int j = 0; j < i; j++)
+        {
+            EXPECT_NE(ids[j], userId);
+        }
+        ids[i] = userId;
     }
 }
 
 TEST_F(BankTest, GenerateUniqueAccountNumbers)
 {
-    std::set<int> generatedNumbers;
-
+    int numbers[100];
     for (int i = 0; i < 100; i++)
     {
         int accountNumber = bank->generateUniqueAccountNumber();
         EXPECT_GE(accountNumber, 100000);
         EXPECT_LE(accountNumber, 999999);
-
-        EXPECT_EQ(generatedNumbers.find(accountNumber), generatedNumbers.end());
-        generatedNumbers.insert(accountNumber);
+        for (int j = 0; j < i; j++)
+        {
+            EXPECT_NE(numbers[j], accountNumber);
+        }
+        numbers[i] = accountNumber;
     }
 }
 

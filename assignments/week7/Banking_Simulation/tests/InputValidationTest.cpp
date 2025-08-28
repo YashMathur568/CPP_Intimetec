@@ -1,11 +1,7 @@
 #include <gtest/gtest.h>
 #include "InputValidation.h"
 
-class InputValidationTest : public ::testing::Test
-{
-};
-
-TEST_F(InputValidationTest, ValidAge)
+TEST(InputValidation, ValidAges)
 {
     EXPECT_TRUE(isValidAge(18));
     EXPECT_TRUE(isValidAge(25));
@@ -13,55 +9,55 @@ TEST_F(InputValidationTest, ValidAge)
     EXPECT_TRUE(isValidAge(100));
 }
 
-TEST_F(InputValidationTest, InvalidAge)
+TEST(InputValidation, ZeroAndNegativeAges)
 {
     EXPECT_FALSE(isValidAge(0));
     EXPECT_FALSE(isValidAge(-1));
     EXPECT_FALSE(isValidAge(-100));
 }
 
-TEST_F(InputValidationTest, ValidEmail)
+TEST(InputValidation, CommonEmailFormats)
 {
     std::string validEmail1 = "test@example.com";
-    std::string validEmail2 = "user.name@domain.org";
-    std::string validEmail3 = "simple@test.co.uk";
+    std::string validEmail2 = "user.name@yash.org";
+    std::string validEmail3 = "simple@test.co.in";
 
     EXPECT_TRUE(isValidEmail(validEmail1));
     EXPECT_TRUE(isValidEmail(validEmail2));
     EXPECT_TRUE(isValidEmail(validEmail3));
 }
 
-TEST_F(InputValidationTest, InvalidEmailNoAt)
+TEST(InputValidation, MissingAtSymbol)
 {
     std::string invalidEmail = "testexample.com";
     EXPECT_FALSE(isValidEmail(invalidEmail));
 }
 
-TEST_F(InputValidationTest, InvalidEmailMultipleAt)
+TEST(InputValidation, MultipleAtSymbols)
 {
     std::string invalidEmail = "test@@example.com";
     EXPECT_FALSE(isValidEmail(invalidEmail));
 }
 
-TEST_F(InputValidationTest, InvalidEmailNoDotAfterAt)
+TEST(InputValidation, MissingDotAfterAt)
 {
     std::string invalidEmail = "test@example";
     EXPECT_FALSE(isValidEmail(invalidEmail));
 }
 
-TEST_F(InputValidationTest, InvalidEmailWithSpaces)
+TEST(InputValidation, EmailContainsSpaces)
 {
     std::string invalidEmail = "test @example.com";
     EXPECT_FALSE(isValidEmail(invalidEmail));
 }
 
-TEST_F(InputValidationTest, InvalidEmailEmpty)
+TEST(InputValidation, EmptyEmailString)
 {
     std::string invalidEmail = "";
     EXPECT_FALSE(isValidEmail(invalidEmail));
 }
 
-TEST_F(InputValidationTest, ValidContact)
+TEST(InputValidation, ValidContactLengths)
 {
     std::string validContact1 = "1234567";
     std::string validContact2 = "1234567890";
@@ -72,37 +68,37 @@ TEST_F(InputValidationTest, ValidContact)
     EXPECT_TRUE(isValidContact(validContact3));
 }
 
-TEST_F(InputValidationTest, InvalidContactTooShort)
+TEST(InputValidation, ContactTooShort)
 {
     std::string invalidContact = "123456";
     EXPECT_FALSE(isValidContact(invalidContact));
 }
 
-TEST_F(InputValidationTest, InvalidContactTooLong)
+TEST(InputValidation, ContactTooLong)
 {
     std::string invalidContact = "1234567890123456";
     EXPECT_FALSE(isValidContact(invalidContact));
 }
 
-TEST_F(InputValidationTest, InvalidContactWithLetters)
+TEST(InputValidation, ContactContainsLetters)
 {
     std::string invalidContact = "123abc7890";
     EXPECT_FALSE(isValidContact(invalidContact));
 }
 
-TEST_F(InputValidationTest, InvalidContactWithSpecialChars)
+TEST(InputValidation, ContactContainsSpecialCharacters)
 {
     std::string invalidContact = "123-456-7890";
     EXPECT_FALSE(isValidContact(invalidContact));
 }
 
-TEST_F(InputValidationTest, InvalidContactEmpty)
+TEST(InputValidation, EmptyContactString)
 {
     std::string invalidContact = "";
     EXPECT_FALSE(isValidContact(invalidContact));
 }
 
-TEST_F(InputValidationTest, ValidPassword)
+TEST(InputValidation, ValidPasswordLengths)
 {
     std::string validPassword1 = "123456";
     std::string validPassword2 = "password123";
@@ -113,7 +109,7 @@ TEST_F(InputValidationTest, ValidPassword)
     EXPECT_TRUE(isValidPassword(validPassword3));
 }
 
-TEST_F(InputValidationTest, InvalidPasswordTooShort)
+TEST(InputValidation, PasswordTooShortOrEmpty)
 {
     std::string invalidPassword1 = "12345";
     std::string invalidPassword2 = "abc";
