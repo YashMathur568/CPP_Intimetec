@@ -14,10 +14,10 @@ public:
     ~PlaylistManager();
 
     bool createPlaylist(const std::string &name) override;
+    bool deletePlaylist(const std::string &name) override;
     IPlaylist *getPlaylist(const std::string &name) override;
     void viewAllPlaylists() const override;
     void loadAllPlaylistsFromDisk() override;
-    void saveAllPlaylistsToDisk() const override;
 };
 
 #endif

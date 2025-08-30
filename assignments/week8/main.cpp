@@ -1,22 +1,21 @@
-#include "PlaylistManager.h"
 #include "MusicPlayer.h"
+#include "SFMLAudioPlayer.h"
+#include "PlaylistManager.h"
 #include "MusicPlaylistSystem.h"
-#include <iostream>
 
 int main()
 {
-    std::cout << "=== Simple Music Player ===\n";
+    IAudioPlayer *audioPlayer = new SFMLAudioPlayer();
+    MusicPlayer *musicPlayer = new MusicPlayer(audioPlayer, true);
+    PlaylistManager *playlistManager = new PlaylistManager();
 
-    PlaylistManager manager;
-    MusicPlayer player;
+    playlistManager->loadAllPlaylistsFromDisk();
 
-    manager.loadAllPlaylistsFromDisk();
-
-    MusicPlaylistSystem system(&manager, &player);
+    MusicPlaylistSystem system(playlistManager, musicPlayer);
     system.showMainMenu();
 
-    manager.saveAllPlaylistsToDisk();
+    delete musicPlayer;
+    delete playlistManager;
 
-    std::cout << "Hope You Like Our Music!\n";
     return 0;
 }

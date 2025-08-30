@@ -6,65 +6,69 @@
 
 using json = nlohmann::json;
 
-Playlist::Playlist(const std::string &name) : name(name) {}
+Playlist::Playlist(const std::string &name, bool ownsSongs)
+    : name(name), ownsSongs(ownsSongs) {}
 
 Playlist::~Playlist()
 {
-    for (auto *song : songs)
+    if (ownsSongs)
     {
-        delete song;
+        for (auto *song : songs)
+            delete song;
     }
 }
 
 void Playlist::addSong(ISong *song)
 {
     songs.push_back(song);
-    saveToFile(name + ".json");
+    saveToFile("../Playlists/" + name + ".json");
 }
 
 void Playlist::removeSongAt(int index)
 {
     if (index >= 0 && index < (int)songs.size())
     {
-        delete songs[index];
+        if (ownsSongs)
+        {
+            delete songs[index];
+        }
         songs.erase(songs.begin() + index);
-        saveToFile(name + ".json");
+        saveToFile("../Playlists/" + name + ".json");
     }
 }
 
 void Playlist::moveSongUp(int index)
 {
-    if (index > 0 && index < (int)songs.size())
+    if (index > 0 && index < songs.size())
     {
         std::swap(songs[index], songs[index - 1]);
-        saveToFile(name + ".json");
+        saveToFile("../Playlists/" + name + ".json");
     }
 }
 
 void Playlist::moveSongDown(int index)
 {
-    if (index >= 0 && index < (int)songs.size() - 1)
+    if (index >= 0 && index < songs.size() - 1)
     {
         std::swap(songs[index], songs[index + 1]);
-        saveToFile(name + ".json");
+        saveToFile("../Playlists/" + name + ".json");
     }
 }
 
 void Playlist::loadFromFile(const std::string &filename)
 {
-    for (auto *song : songs)
-        delete song;
-    songs.clear();
 
     std::ifstream File(filename);
     if (!File.is_open())
+    {
         return;
+    }
 
-    json j;
-    File >> j;
-    name = j.value("name", "");
+    json playlistData;
+    File >> playlistData;
+    name = playlistData.value("name", "");
 
-    for (auto &song : j["songs"])
+    for (auto &song : playlistData["songs"])
     {
         songs.push_back(new Song(song["path"], song["name"]));
     }
@@ -72,15 +76,15 @@ void Playlist::loadFromFile(const std::string &filename)
 
 void Playlist::saveToFile(const std::string &filename) const
 {
-    json j;
-    j["name"] = name;
-    j["songs"] = json::array();
+    json playlistData;
+    playlistData["name"] = name;
+    playlistData["songs"] = json::array();
     for (auto *song : songs)
     {
-        j["songs"].push_back({{"path", song->getPath()}, {"name", song->getName()}});
+        playlistData["songs"].push_back({{"path", song->getPath()}, {"name", song->getName()}});
     }
     std::ofstream out(filename);
-    out << j.dump(4);
+    out << playlistData.dump(4);
 }
 
 const std::vector<ISong *> &Playlist::getSongs() const

@@ -10,9 +10,10 @@ class Playlist : public IPlaylist
 private:
     std::string name;
     std::vector<ISong *> songs;
+    bool ownsSongs;
 
 public:
-    Playlist(const std::string &n);
+    Playlist(const std::string &name, bool ownsSongs = true);
     ~Playlist();
 
     void addSong(ISong *song) override;

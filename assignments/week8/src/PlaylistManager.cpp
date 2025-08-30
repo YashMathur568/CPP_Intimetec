@@ -16,10 +16,47 @@ PlaylistManager::~PlaylistManager()
 bool PlaylistManager::createPlaylist(const std::string &name)
 {
     if (playlists.find(name) != playlists.end())
+    {
         return false;
+    }
+
     auto *playlist = new Playlist(name);
-    playlist->saveToFile(name + ".json");
+
+    if (!fs::exists("../Playlists"))
+    {
+        fs::create_directory("../Playlists");
+    }
+
+    playlist->saveToFile("../Playlists/" + name + ".json");
     playlists[name] = playlist;
+    return true;
+}
+
+bool PlaylistManager::deletePlaylist(const std::string &name)
+{
+    auto iterator = playlists.find(name);
+    if (iterator == playlists.end())
+    {
+        return false;
+    }
+
+    delete iterator->second;
+    playlists.erase(iterator);
+
+    std::string filename = "../Playlists/" + name + ".json";
+    try
+    {
+        if (fs::exists(filename))
+        {
+            fs::remove(filename);
+            std::cout << "Playlist file deleted from disk.\n";
+        }
+    }
+    catch (const std::exception &e)
+    {
+        std::cout << "Warning: Could not delete playlist file: " << e.what() << "\n";
+    }
+
     return true;
 }
 
@@ -27,7 +64,9 @@ IPlaylist *PlaylistManager::getPlaylist(const std::string &name)
 {
     auto iterator = playlists.find(name);
     if (iterator != playlists.end())
+    {
         return iterator->second;
+    }
     return nullptr;
 }
 
@@ -41,26 +80,14 @@ void PlaylistManager::viewAllPlaylists() const
 
 void PlaylistManager::loadAllPlaylistsFromDisk()
 {
-    for (auto &playlist : playlists)
-        delete playlist.second;
-    playlists.clear();
-
-    for (auto &entry : fs::directory_iterator("."))
+    for (auto &file : fs::directory_iterator("../Playlists"))
     {
-        if (entry.path().extension() == ".json")
+        if (file.path().extension() == ".json")
         {
-            auto name = entry.path().stem().string();
-            auto *p = new Playlist(name);
-            p->loadFromFile(entry.path().string());
-            playlists[name] = p;
+            auto name = file.path().stem().string();
+            auto *playlist = new Playlist(name);
+            playlist->loadFromFile(file.path().string());
+            playlists[name] = playlist;
         }
-    }
-}
-
-void PlaylistManager::saveAllPlaylistsToDisk() const
-{
-    for (const auto &playlist : playlists)
-    {
-        playlist.second->saveToFile(playlist.first + ".json");
     }
 }

@@ -2,18 +2,24 @@
 #define MUSICPLAYER_H
 
 #include "IMusicPlayer.h"
-#include <SFML/Audio.hpp>
+#include "IAudioPlayer.h"
 
 class MusicPlayer : public IMusicPlayer
 {
 private:
     IPlaylist *currentPlaylist;
-    int currentIndex;
+    int currentIndexPlaying;
     bool isPlaying;
-    sf::Music sfMusic;
+    IAudioPlayer *audioPlayer;
+    bool ownsAudioPlayer;
 
 public:
-    MusicPlayer();
+    MusicPlayer(IAudioPlayer *audio, bool takeOwnership = true);
+    ~MusicPlayer();
+
+    // // Disable copy constructor and assignment to prevent double deletion
+    // MusicPlayer(const MusicPlayer &) = delete;
+    // MusicPlayer &operator=(const MusicPlayer &) = delete;
 
     void selectPlaylist(IPlaylist *playlist) override;
     void playOrPause() override;
